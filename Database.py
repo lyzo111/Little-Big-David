@@ -14,14 +14,16 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS users (
                     level INTEGER NOT NULL,
                     health INTEGER NOT NULL,
                     statsID INTEGER FOREIGN KEY (statsID) REFERENCES userStats (statsID),
-                )''')
+)''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS userStats (
                     statsID INTEGER PRIMARY KEY,
                     charisma INTEGER  NOT NULL,
                     crafting INTEGER  NOT NULL,
                     strength INTEGER  NOT NULL,
+                    defense INTEGER  NOT NULL,
                     intelligence INTEGER  NOT NULL,
+                    luck INTEGER  NOT NULL,
 )''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS tasks (
