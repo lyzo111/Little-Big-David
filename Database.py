@@ -7,8 +7,8 @@ connection = sqlite3.connect('littleBigDatabase.db')
 cursor = connection.cursor()
 
 # Create tables if non-existing
-cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-                    userID INTEGER PRIMARY KEY,
+cursor.execute('''CREATE TABLE IF NOT EXISTS chars (
+                    charID INTEGER PRIMARY KEY,
                     name TEXT NOT NULL,
                     race INTEGER NOT NULL,
                     level INTEGER NOT NULL,
@@ -16,7 +16,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS users (
                     statsID INTEGER FOREIGN KEY (statsID) REFERENCES userStats (statsID),
 )''')
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS userStats (
+cursor.execute('''CREATE TABLE IF NOT EXISTS charStats (
                     statsID INTEGER PRIMARY KEY,
                     charisma INTEGER  NOT NULL,
                     crafting INTEGER  NOT NULL,
