@@ -1,22 +1,38 @@
 import sqlite3
 
-# Verbindung zur SQLite-Datenbank herstellen (oder erstellen, wenn sie nicht existiert)
-connection = sqlite3.connect('example.db')
+# Connect to database and create if non-existing
+connection = sqlite3.connect('littleBigDatabase.db')
 
-# Cursor-Objekt erstellen, um SQL-Abfragen auszuführen
+# Create cursor object for SQL commands
 cursor = connection.cursor()
 
-# Tabelle erstellen (falls nicht bereits vorhanden)
+# Create tables if non-existing
 cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-                    id INTEGER PRIMARY KEY,
+                    userID INTEGER PRIMARY KEY,
                     name TEXT NOT NULL,
-                    race INTEGER NOT NULL
+                    race INTEGER NOT NULL,
+                    level INTEGER NOT NULL,
+                    health INTEGER NOT NULL,
+                    statsID INTEGER FOREIGN KEY (statsID) REFERENCES userStats (statsID),
                 )''')
 
-# Änderungen speichern
-connection.commit()
+cursor.execute('''CREATE TABLE IF NOT EXISTS userStats (
+                    statsID INTEGER PRIMARY KEY,
+                    charisma INTEGER  NOT NULL,
+                    crafting INTEGER  NOT NULL,
+                    strength INTEGER  NOT NULL,
+                    intelligence INTEGER  NOT NULL,
+)''')
 
-# Verbindung schließen
+cursor.execute('''CREATE TABLE IF NOT EXISTS tasks (
+                    taskID INTEGER PRIMARY KEY,
+                    description TEXT NOT NULL,
+                    XP INTEGER NOT NULL,
+                    date DATE NOT NULL,
+)''')
+
+# Save changes and close connection
+connection.commit()
 connection.close()
 
-print("Datenbank und Tabelle wurden erfolgreich erstellt.")
+print("Database and tables are set.")
