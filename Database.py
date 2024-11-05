@@ -31,7 +31,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS task (
                     taskID INTEGER PRIMARY KEY AUTOINCREMENT,
                     description VARCHAR(255) NOT NULL,
                     XP INT NOT NULL,
-                    date DATE NOT NULL
+                    expirationDate DATE NOT NULL
 )''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS charTask (
