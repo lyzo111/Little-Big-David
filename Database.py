@@ -8,14 +8,14 @@ cursor = connection.cursor()
 
 # Create tables if non-existing
 cursor.execute('''CREATE TABLE IF NOT EXISTS char (
-                    charID INT PRIMARY KEY AUTOINCREMENT ON DELETE CASCADE,
+                    charID INTEGER PRIMARY KEY AUTOINCREMENT,
                     name VARCHAR(50) NOT NULL,
                     race VARCHAR(20) NOT NULL,
                     roll VARCHAR(20) NOT NULL
 )''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS charStat (
-                    charID INT FOREIGN KEY (charID) ON DELETE CASCADE,
+                    charID INTEGER,
                     level INT NOT NULL DEFAULT 1,
                     charisma INT NOT NULL DEFAULT 10,
                     crafting INT NOT NULL DEFAULT 10,
@@ -24,19 +24,19 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS charStat (
                     defense INT NOT NULL DEFAULT 10,
                     intelligence INT NOT NULL DEFAULT 10,
                     luck INT NOT NULL DEFAULT 10,
-                    CONSTRAINT fk_charID FOREIGN KEY (charID) REFERENCES char(charID)
+                    CONSTRAINT fk_charID FOREIGN KEY (charID) REFERENCES char(charID) ON DELETE CASCADE
 )''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS task (
-                    taskID INT PRIMARY KEY AUTOINCREMENT,
+                    taskID INTEGER PRIMARY KEY AUTOINCREMENT,
                     description VARCHAR(255) NOT NULL,
                     XP INT NOT NULL,
                     date DATE NOT NULL
 )''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS charTask (
-                    charID INT,
-                    taskID INT,
+                    charID INTEGER,
+                    taskID INTEGER,
                     PRIMARY KEY (charID, taskID),
                     CONSTRAINT fk_char FOREIGN KEY (charID) REFERENCES char(charID) ON DELETE CASCADE,
                     CONSTRAINT fk_task FOREIGN KEY (taskID) REFERENCES task(taskID) ON DELETE CASCADE
