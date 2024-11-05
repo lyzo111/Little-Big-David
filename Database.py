@@ -9,14 +9,14 @@ cursor = connection.cursor()
 # Create tables if non-existing
 cursor.execute('''CREATE TABLE IF NOT EXISTS char (
                     charID INT PRIMARY KEY AUTOINCREMENT ON DELETE CASCADE,
-                    name TEXT NOT NULL,
-                    race TEXT NOT NULL,
-                    roll TEXT NOT NULL
+                    name VARCHAR(50) NOT NULL,
+                    race VARCHAR(20) NOT NULL,
+                    roll VARCHAR(20) NOT NULL
 )''')
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS statTable (
+cursor.execute('''CREATE TABLE IF NOT EXISTS charStat (
                     charID INT FOREIGN KEY (charID) ON DELETE CASCADE,
-                    level INT NOT NULL DEFAULT 10,
+                    level INT NOT NULL DEFAULT 1,
                     charisma INT NOT NULL DEFAULT 10,
                     crafting INT NOT NULL DEFAULT 10,
                     health INT NOT NULL DEFAULT 10,
@@ -29,7 +29,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS statTable (
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS task (
                     taskID INT PRIMARY KEY AUTOINCREMENT,
-                    description TEXT NOT NULL,
+                    description VARCHAR(255) NOT NULL,
                     XP INT NOT NULL,
                     date DATE NOT NULL
 )''')
@@ -39,7 +39,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS charTask (
                     taskID INT,
                     PRIMARY KEY (charID, taskID),
                     CONSTRAINT fk_char FOREIGN KEY (charID) REFERENCES char(charID) ON DELETE CASCADE,
-                    CONSTRAINT fk_task FOREIGN KEY (taskID) REFERENCES task(taskID) ON DELTETE CASCADE
+                    CONSTRAINT fk_task FOREIGN KEY (taskID) REFERENCES task(taskID) ON DELETE CASCADE
 )''')
 
 # Save changes and close connection
