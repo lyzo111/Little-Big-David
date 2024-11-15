@@ -42,6 +42,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS charTask (
                     CONSTRAINT fk_task FOREIGN KEY (taskID) REFERENCES task(taskID) ON DELETE CASCADE
 )''')
 
+# stagePath -> file path to assets of said stage
 cursor.execute('''CREATE TABLE IF NOT EXISTS stage (
                     stageID INTEGER PRIMARY KEY AUTOINCREMENT,
                     stageName VARCHAR(50) NOT NULL,
