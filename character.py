@@ -38,7 +38,7 @@ class Character:
         finally:
             connection.close()
 
-    def read_user_by_id(self, user_id):
+    def read_character_by_id(self, user_id):
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
