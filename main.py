@@ -3,7 +3,7 @@ import sqlite3
 from nicegui import ui
 from tutorial import Tutorial
 
-def first_time() -> bool:
+def is_first_time() -> bool:
     conn = sqlite3.connect('littleBigDatabase.db')
     cursor = conn.cursor()
     result = None
@@ -16,7 +16,7 @@ def first_time() -> bool:
 
 
 if __name__ == '__main__':
-    if first_time():
+    if is_first_time():
         Tutorial().show()
         # Add character creation
 
