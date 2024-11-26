@@ -11,7 +11,7 @@ def first_time() -> bool:
         cursor.execute("SELECT EXISTS(SELECT 1 FROM char)")
         result = bool(cursor.fetchone()[0])
     finally:
-        # Invert bool to make logic apply to method name
+        # Invert bool to make name of method correspond to value of bool
         return not result if result is not None else False
 
 
