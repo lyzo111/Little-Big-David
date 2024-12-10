@@ -41,3 +41,12 @@ def character_customization():
         ui.label("Hier kannst du deinen Charakter anpassen!").classes("mb-4")
         # Examples for customization
         ui.label("Noch keine Anpassungsoptionen implementiert...").classes("mb-2")
+
+def overworld():
+    with ui.column().classes("items-center justify-center"):
+        ui.label("Overworld - Deine Reise").classes("text-2xl font-bold mb-4")
+        with ui.card().classes("items-center justify-center p-4"):
+            ui.label("Hier siehst du David auf seiner Reise:")
+            ui.image("david_sprite.png").classes("w-16 h-16")
+            ui.label("Gegner: Böser Boss").classes("mt-4")
+            ui.image("enemy_sprite.png").classes("w-16 h-16")
