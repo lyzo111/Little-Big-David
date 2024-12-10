@@ -5,23 +5,32 @@ from tutorial import Tutorial
 
 # Global variables
 current_screen = "main_menu"
-profile_picture = None
 
+# !!! Get path for .png from littleBigDatabase.db
 def load_profile_picture():
-    global profile_picture
     try:
         conn = sqlite3.connect("littleBigDatabase.db")
         cursor = conn.cursor()
         cursor.execute("SELECT profile_picture FROM user_profile LIMIT 1")
         result = cursor.fetchone()
-        if result and result[0]:
-            profile_picture = result[0]  # Path or Base64 from database
-        else:
-            profile_picture = None
+        return result[0] if result and result[0] else "default_profile.png"
     except sqlite3.Error as e:
-        print(f"database error: {e}")
+        print(f"Database error: {e}")
+        return "default_profile.png"
     finally:
         conn.close()
+
+def toggle_profile_menu():
+    with ui.menu(close_on_trigger=True):
+        ui.menu_item("Einstellungen", on_click=lambda: ui.notify("Einstellungen öffnen"))
+        ui.menu_item("Tutorial erneut starten", on_click=lambda: Tutorial().show())
+        ui.menu_item("Disclaimer", on_click=lambda: ui.notify("Little Big David ist ein Spiel..."))
+
+def profile_picture_menu():
+    profile_pic = load_profile_picture()
+    with ui.row().classes("absolute top-4 right-4"):
+        profile_avatar = ui.avatar(img=profile_pic).classes("w-16 h-16 cursor-pointer")
+        profile_avatar.on_click(toggle_profile_menu)
 
 # !!! Establish connection to charTasks here. Tasks here are just wild cards
 def main_menu():
@@ -39,7 +48,6 @@ def character_customization():
     with ui.column().classes("items-center justify-center"):
         ui.label("Charakteranpassung").classes("text-2xl font-bold mb-4")
         ui.label("Hier kannst du deinen Charakter anpassen!").classes("mb-4")
-        # Examples for customization
         ui.label("Noch keine Anpassungsoptionen implementiert...").classes("mb-2")
 
 # !!! Get path for .png from littleBigDatabase.db
@@ -52,36 +60,21 @@ def overworld():
             ui.label("Gegner: Böser Boss").classes("mt-4")
             ui.image("enemy_sprite.png").classes("w-16 h-16")
 
-# !!! Get path for .png from littleBigDatabase.db
-def profile_picture_menu():
-    load_profile_picture()
-    profile_pic = (
-        profile_picture if profile_picture and Path(profile_picture).is_file() else "default_profile.png"
-    )
-    with ui.row().classes("absolute top-4 right-4"):
-        with ui.avatar(img=profile_pic).classes("w-16 h-16 cursor-pointer") as avatar:
-            with ui.menu(trigger=avatar):
-                ui.menu_item("Einstellungen", on_click=lambda: ui.notify("Einstellungen öffnen"))
-                ui.menu_item("Tutorial erneut starten", on_click=lambda: Tutorial().show())
-                ui.menu_item("Disclaimer", on_click=lambda: ui.notify("Little Big David ist ein Spiel..."))
-
 def switch_screen(direction):
     global current_screen
-    if direction == "right" and current_screen == "main_menu":
-        current_screen = "character_customization"
-    elif direction == "left" and current_screen == "main_menu":
-        current_screen = "overworld"
-    elif direction == "left" and current_screen == "character_customization":
-        current_screen = "main_menu"
-    elif direction == "right" and current_screen == "overworld":
-        current_screen = "main_menu"
+    screens = ["main_menu", "character_customization", "overworld"]
+    current_index = screens.index(current_screen)
+
+    if direction == "right":
+        current_screen = screens[(current_index + 1) % len(screens)]
+    elif direction == "left":
+        current_screen = screens[(current_index - 1) % len(screens)]
 
     update_screen()
 
-
 def update_screen():
-    ui.clear()  # Clears current content
-    profile_picture_menu()  # Always show profile picture menu
+    ui.clear()  # Clear all
+    profile_picture_menu()  # Always show profile picture
     if current_screen == "main_menu":
         main_menu()
     elif current_screen == "character_customization":
