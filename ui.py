@@ -50,3 +50,16 @@ def overworld():
             ui.image("david_sprite.png").classes("w-16 h-16")
             ui.label("Gegner: Böser Boss").classes("mt-4")
             ui.image("enemy_sprite.png").classes("w-16 h-16")
+
+# profile picture and dropdown logic
+def profile_picture_menu():
+    load_profile_picture()
+    profile_pic = (
+        profile_picture if profile_picture and Path(profile_picture).is_file() else "default_profile.png"
+    )
+    with ui.row().classes("absolute top-4 right-4"):
+        with ui.avatar(img=profile_pic).classes("w-16 h-16 cursor-pointer") as avatar:
+            with ui.menu(trigger=avatar):
+                ui.menu_item("Einstellungen", on_click=lambda: ui.notify("Einstellungen öffnen"))
+                ui.menu_item("Tutorial erneut starten", on_click=lambda: Tutorial().show())
+                ui.menu_item("Disclaimer", on_click=lambda: ui.notify("Little Big David ist ein Spiel..."))
