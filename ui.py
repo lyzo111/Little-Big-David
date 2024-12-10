@@ -23,7 +23,6 @@ def load_profile_picture():
     finally:
         conn.close()
 
-# UI components
 # !!! Establish connection to charTasks here. Tasks here are just wild cards
 def main_menu():
     with ui.column().classes("items-center justify-center"):
@@ -35,3 +34,10 @@ def main_menu():
             ui.label("3. Trinke 2 Liter Wasser").classes("mb-2")
         ui.label("Wische nach rechts, um deinen Charakter anzupassen.")
         ui.label("Wische nach links, um in die Overworld zu gelangen.")
+
+def character_customization():
+    with ui.column().classes("items-center justify-center"):
+        ui.label("Charakteranpassung").classes("text-2xl font-bold mb-4")
+        ui.label("Hier kannst du deinen Charakter anpassen!").classes("mb-4")
+        # Examples for customization
+        ui.label("Noch keine Anpassungsoptionen implementiert...").classes("mb-2")
