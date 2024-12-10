@@ -2,7 +2,7 @@ import sqlite3
 
 class Database:
     def create_connection(self):
-        return sqlite3.connect("littleBigDatabase.db")  # Dein Datenbankpfad
+        return sqlite3.connect("littleBigDatabase.db")  # Path of database
 
 class Character:
     def __init__(self):
@@ -29,7 +29,7 @@ class Character:
 
             connection.commit()
             print(f"User {name} was created successfully with ID {char_id}.")
-            return char_id  # Rückgabe der ID des Charakters
+            return char_id  # Returns character ID
 
         except sqlite3.Error as e:
             print(f"An error occurred: {e}")

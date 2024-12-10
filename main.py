@@ -12,6 +12,7 @@ def is_first_time() -> bool:
         result = bool(cursor.fetchone()[0])
     finally:
         # Invert bool to make name of method correspond to value of bool
+        # Returns 'True' if user exists, otherwise 'False'
         return not result if result is not None else False
 
 
