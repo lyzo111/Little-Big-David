@@ -42,6 +42,7 @@ def character_customization():
         # Examples for customization
         ui.label("Noch keine Anpassungsoptionen implementiert...").classes("mb-2")
 
+# !!! Get path for .png from littleBigDatabase.db
 def overworld():
     with ui.column().classes("items-center justify-center"):
         ui.label("Overworld - Deine Reise").classes("text-2xl font-bold mb-4")
@@ -51,6 +52,7 @@ def overworld():
             ui.label("Gegner: Böser Boss").classes("mt-4")
             ui.image("enemy_sprite.png").classes("w-16 h-16")
 
+# !!! Get path for .png from littleBigDatabase.db
 def profile_picture_menu():
     load_profile_picture()
     profile_pic = (
@@ -86,3 +88,14 @@ def update_screen():
         character_customization()
     elif current_screen == "overworld":
         overworld()
+
+# Key and swipe events
+ui.on_key("ArrowRight", lambda: switch_screen("right"))
+ui.on_key("ArrowLeft", lambda: switch_screen("left"))
+ui.on_swipe("left", lambda: switch_screen("left"))
+ui.on_swipe("right", lambda: switch_screen("right"))
+
+# Home screen
+update_screen()
+
+ui.run()
