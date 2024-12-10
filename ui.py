@@ -1,12 +1,12 @@
 from nicegui import ui
 import sqlite3
 from pathlib import Path
+from tutorial import Tutorial
 
 # Global variables
 current_screen = "main_menu"
 profile_picture = None
 
-# Database connection and loading profile picture
 def load_profile_picture():
     global profile_picture
     try:
@@ -51,7 +51,6 @@ def overworld():
             ui.label("Gegner: Böser Boss").classes("mt-4")
             ui.image("enemy_sprite.png").classes("w-16 h-16")
 
-# profile picture and dropdown logic
 def profile_picture_menu():
     load_profile_picture()
     profile_pic = (
@@ -63,3 +62,27 @@ def profile_picture_menu():
                 ui.menu_item("Einstellungen", on_click=lambda: ui.notify("Einstellungen öffnen"))
                 ui.menu_item("Tutorial erneut starten", on_click=lambda: Tutorial().show())
                 ui.menu_item("Disclaimer", on_click=lambda: ui.notify("Little Big David ist ein Spiel..."))
+
+def switch_screen(direction):
+    global current_screen
+    if direction == "right" and current_screen == "main_menu":
+        current_screen = "character_customization"
+    elif direction == "left" and current_screen == "main_menu":
+        current_screen = "overworld"
+    elif direction == "left" and current_screen == "character_customization":
+        current_screen = "main_menu"
+    elif direction == "right" and current_screen == "overworld":
+        current_screen = "main_menu"
+
+    update_screen()
+
+
+def update_screen():
+    ui.clear()  # Clears current content
+    profile_picture_menu()  # Always show profile picture menu
+    if current_screen == "main_menu":
+        main_menu()
+    elif current_screen == "character_customization":
+        character_customization()
+    elif current_screen == "overworld":
+        overworld()
