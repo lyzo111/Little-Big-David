@@ -5,7 +5,7 @@ from tutorial import Tutorial
 
 # Global variables
 current_screen = "main_menu"
-content_row = ui.row()
+content_row = ui.row().classes("w-screen flex justify-center")  # Centering container
 
 # !!! Get path for .png from littleBigDatabase.db
 def load_profile_picture():
@@ -36,7 +36,7 @@ def profile_picture_menu():
 
 def switch_screen(direction):
     global current_screen
-    screens = ["main_menu", "character_customization", "overworld"]
+    screens = ["overworld", "main_menu", "character_customization"]
     current_index = screens.index(current_screen)
 
     if direction == "right" and current_index < len(screens) - 1:
