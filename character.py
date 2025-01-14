@@ -4,32 +4,42 @@ class Database:
     def create_connection(self):
         return sqlite3.connect("littleBigDatabase.db")  # Path of database
 
+
 class Character:
     def __init__(self):
         self.db = Database()
 
     def create_character(self, name, race, roll):
         try:
+            # Validierung der Eingaben
+            if not name or not race or not roll:
+                print("Name, Race, and Roll cannot be empty.")
+                return None
+
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
-            # Insert character basic info in chars table
+            # Charakterdaten einfügen
             cursor.execute(
-                "INSERT INTO chars (name, race, roll) VALUES (?, ?, ?)",
+                "INSERT INTO char (name, race, roll) VALUES (?, ?, ?)",
                 (name, race, roll)
             )
-            char_id = cursor.lastrowid  # Get the character's ID
+            char_id = cursor.lastrowid  # ID des neuen Charakters
 
-            # Insert default stats in charStats for the new character
+            # Standardstatistiken für den Charakter hinzufügen
             cursor.execute(
-                "INSERT INTO charStats (charID, level, charisma, crafting, health, strength, defense, intelligence, luck) "
-                "VALUES (?, 1, 1, 1, 1, 1, 1, 1, 1)",
+                "INSERT INTO charStat (charID, level, charisma, crafting, health, strength, defense, intelligence, luck) "
+                "VALUES (?, 1, 10, 10, 10, 10, 10, 10, 10)",
                 (char_id,)
             )
 
             connection.commit()
-            print(f"User {name} was created successfully with ID {char_id}.")
-            return char_id  # Returns character ID
+            print(f"Character '{name}' was created successfully with ID {char_id}.")
+            return char_id  # Gibt die Charakter-ID zurück
+
+        except sqlite3.IntegrityError:
+            print(f"A character with the name '{name}' already exists.")
+            return None
 
         except sqlite3.Error as e:
             print(f"An error occurred: {e}")
@@ -38,12 +48,13 @@ class Character:
         finally:
             connection.close()
 
-    def read_character_by_id(self, user_id):
+    def read_character_by_id(self, char_id):
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
-            cursor.execute("SELECT * FROM chars WHERE charID = ?", (user_id,))
+            # Charakterdaten abrufen
+            cursor.execute("SELECT * FROM char WHERE charID = ?", (char_id,))
             user = cursor.fetchone()
 
             connection.close()
@@ -52,26 +63,40 @@ class Character:
                 print(f"ID: {user[0]}, Name: {user[1]}, Race: {user[2]}, Roll: {user[3]}")
                 return user
             else:
-                print(f"No user found with ID {user_id}")
+                print(f"No character found with ID {char_id}.")
                 return None
 
         except sqlite3.Error as e:
             print(f"An error occurred: {e}")
             return None
 
-    def update_user(self, user_id, new_name, new_race, new_roll):
+    def update_character(self, char_id, new_name=None, new_race=None, new_roll=None):
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
-            cursor.execute(
-                "UPDATE chars SET name = ?, race = ?, roll = ? WHERE charID = ?",
-                (new_name, new_race, new_roll, user_id)
-            )
+            updates = []
+            values = []
+            if new_name:
+                updates.append("name = ?")
+                values.append(new_name)
+            if new_race:
+                updates.append("race = ?")
+                values.append(new_race)
+            if new_roll:
+                updates.append("roll = ?")
+                values.append(new_roll)
 
-            connection.commit()
-            print(f"User {user_id} was updated successfully.")
-            return True
+            if updates:
+                query = f"UPDATE char SET {', '.join(updates)} WHERE charID = ?"
+                values.append(char_id)
+                cursor.execute(query, values)
+                connection.commit()
+                print(f"Character with ID {char_id} was updated successfully.")
+                return True
+            else:
+                print("No updates were provided.")
+                return False
 
         except sqlite3.Error as e:
             print(f"An error occurred: {e}")
@@ -80,14 +105,15 @@ class Character:
         finally:
             connection.close()
 
-    def delete_user(self, user_id):
+    def delete_character(self, char_id):
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
-            cursor.execute("DELETE FROM chars WHERE charID = ?", (user_id,))
+            # Charakter löschen
+            cursor.execute("DELETE FROM char WHERE charID = ?", (char_id,))
             connection.commit()
-            print(f"User {user_id} was deleted successfully.")
+            print(f"Character with ID {char_id} was deleted successfully.")
             return True
 
         except sqlite3.Error as e:
