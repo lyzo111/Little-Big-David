@@ -25,7 +25,7 @@ task_ops = TaskOperations()
 
 # Navigation
 with ui.header():
-    ui.label('Little Big RPG')
+    ui.label('Little Big David')
     ui.link('Characters', '/characters')
     ui.link('Tasks', '/tasks')
 
