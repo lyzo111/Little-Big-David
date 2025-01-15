@@ -28,7 +28,6 @@ with ui.header():
     ui.label('Little Big RPG')
     ui.link('Characters', '/characters')
     ui.link('Tasks', '/tasks')
-    ui.link('Stages', '/stages')
 
 
 # Character Management
