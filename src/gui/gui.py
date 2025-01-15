@@ -28,6 +28,7 @@ with ui.header():
     ui.label('Little Big David')
     ui.link('Characters', '/characters')
     ui.link('Tasks', '/tasks')
+    ui.link('Tutorial', '/tutorial')
 
 
 # Character Management
