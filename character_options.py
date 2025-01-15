@@ -1,4 +1,5 @@
 import sqlite3
+from leveling import LevelingSystem
 
 class CharTaskOperations:
     def __init__(self, db_path="littleBigDatabase.db"):
@@ -73,7 +74,6 @@ class CharTaskOperations:
             connection = sqlite3.connect(self.db_path)
             cursor = connection.cursor()
 
-
             cursor.execute(
                 "SELECT * FROM charTask WHERE charID = ? AND taskID = ?",
                 (char_id, task_id)
@@ -83,12 +83,23 @@ class CharTaskOperations:
                 print(f"Task {task_id} is not assigned to character {char_id}.")
                 return False
 
+            cursor.execute("SELECT XP FROM task WHERE taskID = ?", (task_id,))
+            task = cursor.fetchone()
+            if not task:
+                print(f"Task {task_id} does not exist.")
+                return False
+
+            xp_gain = task[0]
 
             cursor.execute(
                 "DELETE FROM charTask WHERE charID = ? AND taskID = ?",
                 (char_id, task_id)
             )
             connection.commit()
+
+            leveling = LevelingSystem(self.db_path)
+            leveling.add_xp(char_id, xp_gain)
+
             print(f"Task {task_id} marked as completed for character {char_id}.")
             return True
 
