@@ -49,6 +49,15 @@ def init_db():
                         stagePath VARCHAR(255) NOT NULL -- stagePath -> file path to assets of said stage
     )''')
 
+    # Verknüpfung Stages und Aufgaben
+    cursor.execute('''CREATE TABLE IF NOT EXISTS stageTask (
+                          stageID INTEGER,
+                          taskID INTEGER,
+                          PRIMARY KEY (stageID, taskID),
+                          FOREIGN KEY (stageID) REFERENCES stage(stageID) ON DELETE CASCADE,
+                          FOREIGN KEY (taskID) REFERENCES task(taskID) ON DELETE CASCADE
+      )''')
+
     # Save changes and close connection
     connection.commit()
     connection.close()
