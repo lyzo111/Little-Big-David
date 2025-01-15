@@ -11,7 +11,7 @@ class Character:
 
     def create_character(self, name, race, roll):
         try:
-            # Validierung der Eingaben
+
             if not name or not race or not roll:
                 print("Name, Race, and Roll cannot be empty.")
                 return None
@@ -19,14 +19,14 @@ class Character:
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
-            # Charakterdaten einfügen
+
             cursor.execute(
                 "INSERT INTO char (name, race, roll) VALUES (?, ?, ?)",
                 (name, race, roll)
             )
-            char_id = cursor.lastrowid  # ID des neuen Charakters
+            char_id = cursor.lastrowid
 
-            # Standardstatistiken für den Charakter hinzufügen
+
             cursor.execute(
                 "INSERT INTO charStat (charID, level, charisma, crafting, health, strength, defense, intelligence, luck) "
                 "VALUES (?, 1, 10, 10, 10, 10, 10, 10, 10)",
@@ -35,7 +35,7 @@ class Character:
 
             connection.commit()
             print(f"Character '{name}' was created successfully with ID {char_id}.")
-            return char_id  # Gibt die Charakter-ID zurück
+            return char_id
 
         except sqlite3.IntegrityError:
             print(f"A character with the name '{name}' already exists.")
@@ -53,7 +53,7 @@ class Character:
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
-            # Charakterdaten abrufen
+
             cursor.execute("SELECT * FROM char WHERE charID = ?", (char_id,))
             user = cursor.fetchone()
 
@@ -110,7 +110,7 @@ class Character:
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
-            # Charakter löschen
+
             cursor.execute("DELETE FROM char WHERE charID = ?", (char_id,))
             connection.commit()
             print(f"Character with ID {char_id} was deleted successfully.")
