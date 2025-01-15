@@ -1,5 +1,5 @@
 import sqlite3
-from leveling import LevelingSystem
+from src.database.leveling import LevelingSystem
 
 class CharTaskOperations:
     def __init__(self, db_path="littleBigDatabase.db"):

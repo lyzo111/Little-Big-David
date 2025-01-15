@@ -2,7 +2,7 @@ import sqlite3
 
 def init_db():
     # Connect to database and create if non-existing
-    connection = sqlite3.connect('littleBigDatabase.db')
+    connection = sqlite3.connect('../../littleBigDatabase.db')
 
     # Create cursor object for SQL commands
     cursor = connection.cursor()

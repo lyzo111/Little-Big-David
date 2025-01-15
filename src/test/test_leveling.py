@@ -1,6 +1,6 @@
-from character_options import CharTaskOperations
-from character import Character
-from task_operations import TaskOperations
+from src.operations.character_options import CharTaskOperations
+from src.operations.character import Character
+from src.operations.task_operations import TaskOperations
 
 if __name__ == "__main__":
     char_ops = Character()

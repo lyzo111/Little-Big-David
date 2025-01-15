@@ -2,7 +2,7 @@ import sqlite3
 
 class Database:
     def create_connection(self):
-        return sqlite3.connect("littleBigDatabase.db")  # Your actual database path
+        return sqlite3.connect("../../littleBigDatabase.db")  # Your actual database path
 
 class CharacterOperations:
     def __init__(self, db):

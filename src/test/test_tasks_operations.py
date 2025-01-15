@@ -1,4 +1,4 @@
-from task_operations import TaskOperations
+from src.operations.task_operations import TaskOperations
 
 if __name__ == "__main__":
     task_ops = TaskOperations()

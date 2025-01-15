@@ -2,7 +2,7 @@ import sqlite3
 
 class Database:
     def create_connection(self):
-        return sqlite3.connect("littleBigDatabase.db")  # Path of database
+        return sqlite3.connect("../../littleBigDatabase.db")  # Path of database
 
 
 class Character:

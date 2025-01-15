@@ -1,4 +1,4 @@
-from stage_operations import StageOperations
+from src.operations.stage_operations import StageOperations
 
 if __name__ == "__main__":
     stage_ops = StageOperations()

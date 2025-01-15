@@ -1,4 +1,4 @@
-from character import Character
+from src.operations.character import Character
 
 if __name__ == "__main__":
     char = Character()
