@@ -1,32 +1,35 @@
 from nicegui import ui
 import sqlite3
 from pathlib import Path
-from tutorial import Tutorial
 
 # Global variables
+default_pfp = "default_pfp.jpg"
 current_screen = "main_menu"
 screens = ["overworld", "main_menu", "character_customization"]
 content_row = ui.row().classes("w-screen flex justify-center")  # Container for centering content horizontally
+left_button_container = ui.row().classes("absolute left-4 top-1/2 transform -translate-y-1/2")  # Left button container
+right_button_container = ui.row().classes("absolute right-4 top-1/2 transform -translate-y-1/2")  # Right button container
 
 
 def load_profile_picture():
-    default_pfp = "default_pfp.jpg"
     try:
         conn = sqlite3.connect("littleBigDatabase.db")
         cursor = conn.cursor()
         cursor.execute("SELECT profile_picture FROM user_profile LIMIT 1")
         result = cursor.fetchone()
-        conn.close()
-        return result[0] if result and result[0] else default_pfp
+        profile_pic = result[0] if result and result[0] else default_pfp
+        if not Path(profile_pic).is_file():
+            return default_pfp
+        return profile_pic
     except sqlite3.Error as e:
         print(f"Database error: {e}")
         return default_pfp
 
 
 def toggle_profile_menu():
-    with ui.menu(close_on_trigger=True):
+    with ui.menu():
         ui.menu_item("Einstellungen", on_click=lambda: ui.notify("Einstellungen öffnen"))
-        ui.menu_item("Tutorial erneut starten", on_click=lambda: Tutorial().show())
+        ui.menu_item("Tutorial erneut starten", on_click=lambda: ui.notify("Tutorial wird gestartet"))
         ui.menu_item("Disclaimer", on_click=lambda: ui.notify("Little Big David ist ein Spiel..."))
 
 
@@ -34,8 +37,8 @@ def profile_picture_menu():
     profile_pic = load_profile_picture()
     with ui.row().classes("absolute top-4 right-4"):
         with ui.button(on_click=toggle_profile_menu).classes("rounded-full p-0 w-16 h-16 cursor-pointer shadow-lg"):
-            ui.avatar(f"img:{profile_pic}").classes("w-16 h-16")
-
+            with ui.avatar():
+                ui.image(f"img:{profile_pic}")
 
 
 def switch_screen(direction):
@@ -52,7 +55,11 @@ def switch_screen(direction):
 
 def update_screen():
     content_row.clear()
-    profile_picture_menu()  # Always show profile picture
+    left_button_container.clear()
+    right_button_container.clear()
+
+    profile_picture_menu()
+
     if current_screen == "main_menu":
         main_menu()
     elif current_screen == "character_customization":
@@ -97,19 +104,16 @@ def overworld():
 
 def navigation_buttons():
     current_index = screens.index(current_screen)
-    nav_button_class = "rounded-full shadow-lg"
 
     # Left button
     if current_index > 0:
-        with ui.row().classes("absolute left-4 top-1/2 transform -translate-y-1/2"):
-            ui.button(on_click=lambda: switch_screen("left")).props("fab icon=arrow_back").classes(
-                nav_button_class)
+        with left_button_container:
+            ui.button(on_click=lambda: switch_screen("left")).props("fab icon=arrow_back").classes("rounded-full shadow-lg")
 
     # Right button
     if current_index < len(screens) - 1:
-        with ui.row().classes("absolute right-4 top-1/2 transform -translate-y-1/2"):
-            ui.button(on_click=lambda: switch_screen("right")).props("fab icon=arrow_forward").classes(
-                nav_button_class)
+        with right_button_container:
+            ui.button(on_click=lambda: switch_screen("right")).props("fab icon=arrow_forward").classes("rounded-full shadow-lg")
 
 
 # Home screen
