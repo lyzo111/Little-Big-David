@@ -2,6 +2,8 @@
 import sqlite3
 from nicegui import ui
 from tutorial import Tutorial
+from src.database.database import init_db, populate_database
+
 
 def is_first_time() -> bool:
     conn = sqlite3.connect('../littleBigDatabase.db')
@@ -18,6 +20,9 @@ def is_first_time() -> bool:
 
 if __name__ == '__main__':
     if is_first_time():
+        print("Initializing database...")
+        init_db()
+        populate_database()
         Tutorial().show()
         # Add character creation
 
