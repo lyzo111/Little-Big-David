@@ -9,12 +9,12 @@ class Character:
     def __init__(self):
         self.db = Database()
 
-    def create_character(self, name, race, roll, profile_image=None):
+    def create_character(self, name, race, classname, profile_image=None):
         try:
             # Validierung: Name, Rasse und Klasse dürfen nicht leer sein
-            if not name or not race or not roll:
-                print("Name, Race, and Roll cannot be empty.")
-                return {"success": False, "message": "Name, Race, and Roll cannot be empty."}
+            if not name or not race or not classname:
+                print("Name, Race, and Class cannot be empty.")
+                return {"success": False, "message": "Name, Race, and Class cannot be empty."}
 
             connection = self.db.create_connection()
             cursor = connection.cursor()
@@ -24,14 +24,14 @@ class Character:
             if not cursor.fetchone():
                 return {"success": False, "message": f"Race '{race}' does not exist in the database."}
 
-            cursor.execute("SELECT 1 FROM roll WHERE name = ?", (roll,))
+            cursor.execute("SELECT 1 FROM classname WHERE name = ?", (classname,))
             if not cursor.fetchone():
-                return {"success": False, "message": f"Class '{roll}' does not exist in the database."}
+                return {"success": False, "message": f"Class '{classname}' does not exist in the database."}
 
             # Charakter in die Tabelle einfügen
             cursor.execute(
-                "INSERT INTO char (name, race, roll, profile_image) VALUES (?, ?, ?, ?)",
-                (name, race, roll, profile_image)
+                "INSERT INTO char (name, race, classname, profile_image) VALUES (?, ?, ?, ?)",
+                (name, race, classname, profile_image)
             )
             char_id = cursor.lastrowid
 
@@ -69,7 +69,7 @@ class Character:
             connection.close()
 
             if user:
-                print(f"ID: {user[0]}, Name: {user[1]}, Race: {user[2]}, Roll: {user[3]}, Profile Image: {user[4]}")
+                print(f"ID: {user[0]}, Name: {user[1]}, Race: {user[2]}, Classe: {user[3]}, Profile Image: {user[4]}")
                 return {"success": True, "data": user}
             else:
                 print(f"No character found with ID {char_id}.")
@@ -79,7 +79,7 @@ class Character:
             print(f"An error occurred: {e}")
             return {"success": False, "message": f"An error occurred: {e}"}
 
-    def update_character(self, char_id, new_name=None, new_race=None, new_roll=None):
+    def update_character(self, char_id, new_name=None, new_race=None, new_classname=None):
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
@@ -92,9 +92,9 @@ class Character:
             if new_race:
                 updates.append("race = ?")
                 values.append(new_race)
-            if new_roll:
-                updates.append("roll = ?")
-                values.append(new_roll)
+            if new_classname:
+                updates.append("classname = ?")
+                values.append(new_classname)
 
             if updates:
                 query = f"UPDATE char SET {', '.join(updates)} WHERE charID = ?"

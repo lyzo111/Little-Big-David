@@ -8,13 +8,13 @@ class CharacterOperations:
     def __init__(self, db):
         self.db = db
 
-    def create_character(self, name, race, roll):
+    def create_character(self, name, race, classname):
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
             # Insert character details
-            cursor.execute("INSERT INTO char (name, race, roll) VALUES (?, ?, ?)", (name, race, roll))
+            cursor.execute("INSERT INTO char (name, race, classname) VALUES (?, ?, ?)", (name, race, classname))
             connection.commit()
 
             # Get the ID of the newly created character
@@ -42,7 +42,7 @@ class CharacterOperations:
             connection.close()
 
             if character:
-                print(f"Found character: ID: {character[0]}, Name: {character[1]}, Race: {character[2]}, Roll: {character[3]}")
+                print(f"Found character: ID: {character[0]}, Name: {character[1]}, Race: {character[2]}, Class: {character[3]}")
                 return character
             else:
                 print(f"No character found with the name {name}")
@@ -52,13 +52,13 @@ class CharacterOperations:
             print(f"An error occurred: {e}")
             return None
 
-    def update_character(self, char_id, new_name, new_race, new_roll):
+    def update_character(self, char_id, new_name, new_race, new_classname):
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
-            cursor.execute("UPDATE char SET name = ?, race = ?, roll = ? WHERE charID = ?",
-                           (new_name, new_race, new_roll, char_id))
+            cursor.execute("UPDATE char SET name = ?, race = ?, classname = ? WHERE charID = ?",
+                           (new_name, new_race, new_classname, char_id))
             connection.commit()
             connection.close()
             print(f"Character with ID {char_id} updated successfully.")
