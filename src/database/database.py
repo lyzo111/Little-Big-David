@@ -83,13 +83,23 @@ def populate_database():
 
     # Klassen hinzufügen
     classes = [
-        ('Warrior',), ('Mage',), ('Rogue',), ('Bard',), ('Paladin',), ('Ranger',)
+        ('Warrior',),
+        ('Mage',),
+        ('Rogue',),
+        ('Bard',),
+        ('Paladin',),
+        ('Ranger',)
     ]
     cursor.executemany("INSERT OR IGNORE INTO class (name) VALUES (?)", classes)
 
     # Rassen hinzufügen
     races = [
-        ('Human',), ('Elf',), ('Dwarf',), ('Orc',), ('Tiefling',), ('Halfling',)
+        ('Human',),
+        ('Elf',),
+        ('Dwarf',),
+        ('Orc',),
+        ('Tiefling',),
+        ('Halfling',)
     ]
     cursor.executemany("INSERT OR IGNORE INTO race (name) VALUES (?)", races)
 
@@ -104,26 +114,17 @@ def populate_database():
     ]
     cursor.executemany("INSERT OR IGNORE INTO task (description, XP, expirationDate) VALUES (?, ?, ?)", tasks)
 
-    # Beispiel-Stages hinzufügen
-    stages = [
-        ('Skeleton King\'s Lair', '/assets/skeleton_lair.png'),
-        ('Ancient Ruins', '/assets/ancient_ruins.png'),
-        ('Village Outskirts', '/assets/village_outskirts.png')
-    ]
-    cursor.executemany("INSERT OR IGNORE INTO stage (stageName, stagePath) VALUES (?, ?)", stages)
-
-    # Beispiel-StageTasks hinzufügen
-    cursor.execute("SELECT stageID FROM stage LIMIT 1")
-    stage_id = cursor.fetchone()[0]
-    cursor.execute("SELECT taskID FROM task LIMIT 3")
-    task_ids = cursor.fetchall()
-
-    for task_id in task_ids:
-        cursor.execute("INSERT OR IGNORE INTO stageTask (stageID, taskID) VALUES (?, ?)", (stage_id, task_id[0]))
-
+    # Änderungen speichern und Verbindung schließen
     connection.commit()
     connection.close()
-    print("Database populated successfully.")
+
+    print("Datenbanken wurden erfolgreich befüllt.")
+
+
+# **Neue Database-Klasse hinzufügen**
+class Database:
+    def create_connection(self):
+        return sqlite3.connect("../../littleBigDatabase.db")
 
 
 if __name__ == "__main__":
