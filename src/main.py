@@ -4,7 +4,7 @@ from nicegui import ui
 from tutorial import Tutorial
 
 def is_first_time() -> bool:
-    conn = sqlite3.connect('littleBigDatabase.db')
+    conn = sqlite3.connect('../littleBigDatabase.db')
     cursor = conn.cursor()
     result = None
     try:

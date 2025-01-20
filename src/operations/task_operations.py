@@ -1,8 +1,12 @@
 import sqlite3
 
+class Database:
+    def create_connection(self):
+        return sqlite3.connect("../../littleBigDatabase.db")
+
 class TaskOperations:
-    def __init__(self, db_path="littleBigDatabase.db"):
-        self.db_path = db_path
+    def __init__(self, db):
+        self.db = db
 
     def create_task(self, description, xp, expiration_date):
         try:
@@ -11,7 +15,7 @@ class TaskOperations:
                 print("Invalid task input: Description, XP, and expiration date are required.")
                 return None
 
-            connection = sqlite3.connect(self.db_path)
+            connection = self.db.create_connection()
             cursor = connection.cursor()
 
             # Aufgabe erstellen
@@ -33,7 +37,7 @@ class TaskOperations:
 
     def get_task(self, task_id):
         try:
-            connection = sqlite3.connect(self.db_path)
+            connection = self.db.create_connection()
             cursor = connection.cursor()
 
             # Aufgabe abrufen
@@ -54,7 +58,7 @@ class TaskOperations:
 
     def update_task(self, task_id, description=None, xp=None, expiration_date=None):
         try:
-            connection = sqlite3.connect(self.db_path)
+            connection = self.db.create_connection()
             cursor = connection.cursor()
 
             updates = []
@@ -89,7 +93,7 @@ class TaskOperations:
 
     def delete_task(self, task_id):
         try:
-            connection = sqlite3.connect(self.db_path)
+            connection = self.db.create_connection()
             cursor = connection.cursor()
 
             # Aufgabe löschen

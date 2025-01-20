@@ -1,7 +1,12 @@
-from task_operations import TaskOperations
+from src.database.database import Database
+from src.operations.task_operations import TaskOperations
 
 if __name__ == "__main__":
-    task_ops = TaskOperations()
+    # Initialisiere das Datenbankobjekt
+    db = Database()
+
+    # Übergabe des Datenbankobjekts an TaskOperations
+    task_ops = TaskOperations(db)
 
     # Aufgabe erstellen
     task_id = task_ops.create_task("Defeat the Lich King", 50, "2025-01-31")
