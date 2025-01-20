@@ -1,22 +1,14 @@
-from src.operations.character import Character
+from src.database.database import Database
+
+from src.operations.task_operations import TaskOperations
 
 if __name__ == "__main__":
-    char = Character()
+    # Erstelle die Datenbankinstanz
+    db = Database()
 
-    # Charakter erstellen
-    char_id = char.create_character("Arthas", "Human", "Paladin")
+    # Übergib die Datenbankinstanz an TaskOperations
+    task_ops = TaskOperations(db)
 
-    # Charakter abrufen
-    char.read_character_by_id(char_id)
-
-    # Charakter aktualisieren
-    char.update_character(char_id, new_name="Arthas Menethil", new_race="Undead")
-
-    # Charakter erneut abrufen
-    char.read_character_by_id(char_id)
-
-    # Charakter löschen
-    char.delete_character(char_id)
-
-    # Gelöschten Charakter abrufen
-    char.read_character_by_id(char_id)
+    # Test: Aufgabe erstellen
+    task_id = task_ops.create_task("Testaufgabe", 50, "2025-01-31")
+    print(f"Erstellte Task-ID: {task_id}")
