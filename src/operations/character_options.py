@@ -74,6 +74,7 @@ class CharTaskOperations:
             connection = sqlite3.connect(self.db_path)
             cursor = connection.cursor()
 
+            # Überprüfen, ob die Aufgabe dem Charakter zugewiesen ist
             cursor.execute(
                 "SELECT * FROM charTask WHERE charID = ? AND taskID = ?",
                 (char_id, task_id)
@@ -83,6 +84,7 @@ class CharTaskOperations:
                 print(f"Task {task_id} is not assigned to character {char_id}.")
                 return False
 
+            # XP der Aufgabe abrufen
             cursor.execute("SELECT XP FROM task WHERE taskID = ?", (task_id,))
             task = cursor.fetchone()
             if not task:
@@ -91,14 +93,21 @@ class CharTaskOperations:
 
             xp_gain = task[0]
 
+            # Aufgabe als abgeschlossen markieren (löschen)
             cursor.execute(
                 "DELETE FROM charTask WHERE charID = ? AND taskID = ?",
                 (char_id, task_id)
             )
             connection.commit()
 
+            # XP hinzufügen und Level prüfen
             leveling = LevelingSystem(self.db_path)
-            leveling.add_xp(char_id, xp_gain)
+            level_up = leveling.add_xp(char_id, xp_gain)
+
+            if level_up:
+                # Stats verbessern, wenn ein Level-Up erreicht wurde
+                leveling.improve_stats_on_level_up(char_id)
+                print(f"Character {char_id} leveled up and stats improved.")
 
             print(f"Task {task_id} marked as completed for character {char_id}.")
             return True
