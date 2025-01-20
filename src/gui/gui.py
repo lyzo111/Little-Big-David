@@ -50,13 +50,19 @@ with (ui.header().style('background-color: darkorange; color: white; display: fl
 # Character Management
 @ui.page('/characters')
 def characters_page():
+    races = []
+    classnames = []
+
     with ui.row():
         ui.label('Characters Management').classes('text-h5')
     with ui.card():
-        ui.input('Name').bind_value(state, 'name')
-        ui.input('Race').bind_value(state, 'race')
-        ui.input('Roll').bind_value(state, 'roll')
-        ui.button('Create Character', on_click=lambda: create_character(state.name, state.race, state.roll))
+        select_name = ui.input('Name').bind_value(state, 'name')
+        select_race = ui.select(
+            options=['Human', 'Elf', 'Dwarf', 'Gnome', 'Orc']).bind_value(state, 'race')
+        select_class = ui.select(
+            options=['1', '2', '3', '4', '5', '6']).bind_value(state, 'class')
+
+        ui.button('Create Character', on_click=lambda: create_character(state.name, state.race, state.classname))
 
 
 # Task Management
@@ -72,8 +78,8 @@ def tasks_page():
 
 
 # Functions
-def create_character(name, race, roll):
-    char_ops.create_character(name, race, roll)
+def create_character(name, race, classname):
+    char_ops.create_character(name, race, classname)
     ui.notify('Character created successfully!')
 
 
