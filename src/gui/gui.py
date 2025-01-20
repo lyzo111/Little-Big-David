@@ -18,7 +18,7 @@ right_button_container = ui.row().classes(
     "absolute right-4 top-1/2 transform -translate-y-1/2")  # Right button container
 
 # State Objects
-state = SimpleNamespace(name='', race='', roll='', description='', xp=0, expiration_date='', stage_name='',
+state = SimpleNamespace(name='', race='', classname='', description='', xp=0, expiration_date='', stage_name='',
                         stage_path='')
 dark_mode = ui.dark_mode()
 is_dark_mode = False  # Website starts in light mode
