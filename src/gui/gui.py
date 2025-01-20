@@ -18,6 +18,7 @@ right_button_container = ui.row().classes(
 # State Objects
 state = SimpleNamespace(name='', race='', roll='', description='', xp=0, expiration_date='', stage_name='',
                         stage_path='')
+dark = ui.dark_mode()
 
 # Operation Instances
 char_ops = Character()
@@ -29,6 +30,8 @@ with ui.header():
     ui.link('Characters', '/characters')
     ui.link('Tasks', '/tasks')
     ui.link('Tutorial', '/tutorial')
+    # Lambda prevents toggle method from firing when code is run -> only fires when on_change method is triggered
+    ui.switch('light / dark mode', on_change=(lambda e: dark.toggle())).style('width: 200px; margin-left: auto;')
 
 
 # Character Management
