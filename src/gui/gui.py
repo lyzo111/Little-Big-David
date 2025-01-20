@@ -18,20 +18,31 @@ right_button_container = ui.row().classes(
 # State Objects
 state = SimpleNamespace(name='', race='', roll='', description='', xp=0, expiration_date='', stage_name='',
                         stage_path='')
-dark = ui.dark_mode()
+dark_mode = ui.dark_mode()
+is_dark_mode = False  # A variable to track the state of dark mode
 
 # Operation Instances
 char_ops = Character()
 task_ops = TaskOperations()
 
+
 # Navigation
-with ui.header():
+def toggle_mode():
+    global is_dark_mode
+    is_dark_mode = not is_dark_mode  # Update state
+    dark_mode.toggle()  # Toggle dark mode
+    mode_label.set_text('Dark Mode' if is_dark_mode else 'Light Mode')  # Update the label text
+
+
+with (ui.header()):
     ui.label('Little Big David')
     ui.link('Characters', '/characters')
     ui.link('Tasks', '/tasks')
     ui.link('Tutorial', '/tutorial')
-    # Lambda prevents toggle method from firing when code is run -> only fires when on_change method is triggered
-    ui.switch('light / dark mode', on_change=(lambda e: dark.toggle())).style('width: 200px; margin-left: auto;')
+    with ui.row().style('margin-left: auto; align-items: center; gap: 8px;'):
+        mode_label = ui.label('Light Mode')
+        # Lambda prevents toggle method from firing when code is run -> only fires when on_change method is triggered
+        brightness_switch = ui.switch(on_change=(lambda e: toggle_mode()))
 
 
 # Character Management
