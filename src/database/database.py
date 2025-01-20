@@ -1,5 +1,6 @@
 import sqlite3
 
+
 def init_db():
     # Connect to database and create if non-existing
     connection = sqlite3.connect('../../littleBigDatabase.db')
@@ -10,6 +11,7 @@ def init_db():
     # Create tables if non-existing
     cursor.execute('''CREATE TABLE IF NOT EXISTS char (
                         charID INTEGER PRIMARY KEY AUTOINCREMENT,
+                        profil_image TEXT NOT NULL,
                         name VARCHAR(50) NOT NULL,
                         race VARCHAR(20) NOT NULL,
                         roll VARCHAR(20) NOT NULL
@@ -57,23 +59,74 @@ def init_db():
                           PRIMARY KEY (stageID, taskID),
                           FOREIGN KEY (stageID) REFERENCES stage(stageID) ON DELETE CASCADE,
                           FOREIGN KEY (taskID) REFERENCES task(taskID) ON DELETE CASCADE
-      )''')
+    )''')
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS class (
                           classID INTEGER PRIMARY KEY AUTOINCREMENT,
                           name VARCHAR(50) NOT NULL UNIQUE
-      )''')
+    )''')
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS race (
                           raceID INTEGER PRIMARY KEY AUTOINCREMENT,
                           name VARCHAR(50) NOT NULL UNIQUE
-      )''')
+    )''')
 
     # Save changes and close connection
     connection.commit()
     connection.close()
 
-    print("Database and tables are set.")
+
+def populate_database():
+    # Verbindung zur Datenbank herstellen
+    connection = sqlite3.connect('../../littleBigDatabase.db')
+    cursor = connection.cursor()
+
+    # Klassen hinzufügen
+    classes = [
+        ('Warrior',), ('Mage',), ('Rogue',), ('Bard',), ('Paladin',), ('Ranger',)
+    ]
+    cursor.executemany("INSERT OR IGNORE INTO class (name) VALUES (?)", classes)
+
+    # Rassen hinzufügen
+    races = [
+        ('Human',), ('Elf',), ('Dwarf',), ('Orc',), ('Tiefling',), ('Halfling',)
+    ]
+    cursor.executemany("INSERT OR IGNORE INTO race (name) VALUES (?)", races)
+
+    # Beispiel-Tasks hinzufügen
+    tasks = [
+        ('Trainiere für 30 Minuten', 50, '2025-01-20'),
+        ('Lies ein Buchkapitel', 30, '2025-01-21'),
+        ('Trinke 2 Liter Wasser', 20, '2025-01-20'),
+        ('Mache 10 Minuten Meditation', 40, '2025-01-22'),
+        ('Erstelle ein Lernprotokoll', 70, '2025-01-23'),
+        ('Lerne eine neue Fähigkeit', 100, '2025-01-25')
+    ]
+    cursor.executemany("INSERT OR IGNORE INTO task (description, XP, expirationDate) VALUES (?, ?, ?)", tasks)
+
+    # Beispiel-Stages hinzufügen
+    stages = [
+        ('Skeleton King\'s Lair', '/assets/skeleton_lair.png'),
+        ('Ancient Ruins', '/assets/ancient_ruins.png'),
+        ('Village Outskirts', '/assets/village_outskirts.png')
+    ]
+    cursor.executemany("INSERT OR IGNORE INTO stage (stageName, stagePath) VALUES (?, ?)", stages)
+
+    # Beispiel-StageTasks hinzufügen
+    cursor.execute("SELECT stageID FROM stage LIMIT 1")
+    stage_id = cursor.fetchone()[0]
+    cursor.execute("SELECT taskID FROM task LIMIT 3")
+    task_ids = cursor.fetchall()
+
+    for task_id in task_ids:
+        cursor.execute("INSERT OR IGNORE INTO stageTask (stageID, taskID) VALUES (?, ?)", (stage_id, task_id[0]))
+
+    connection.commit()
+    connection.close()
+    print("Database populated successfully.")
+
 
 if __name__ == "__main__":
     init_db()
+    populate_database()
+
