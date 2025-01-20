@@ -36,12 +36,11 @@ def toggle_mode():
     mode_label.set_text('Dark Mode' if is_dark_mode else 'Light Mode')
 
 
-with (ui.header().style('background-color: #1e293b; color: white;')):
-    with ui.row().style('display: flex; align-items: center;'):
-        ui.label('Little Big David')
-        ui.link('Characters', '/characters')
-        ui.link('Tasks', '/tasks')
-        ui.link('Tutorial', '/tutorial')
+with (ui.header().style('background-color: darkorange; color: white; display: flex; align-items: center;')):
+    ui.label('Little Big David')
+    ui.link('Characters', '/characters').style('color: white;')
+    ui.link('Tasks', '/tasks').style('color: white;')
+    ui.link('Tutorial', '/tutorial').style('color: white;')
     with ui.row().style('margin-left: auto; align-items: center; gap: 8px;'):
         mode_label = ui.label('Light Mode')
         # Lambda prevents toggle method from firing when code is run -> only fires when on_change method is triggered
