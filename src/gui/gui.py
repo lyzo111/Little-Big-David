@@ -1,5 +1,5 @@
 from nicegui import ui
-from nicegui.events import KeyEventArguments
+from src.database import utils
 import sqlite3
 from pathlib import Path
 
@@ -50,17 +50,16 @@ with (ui.header().style('background-color: darkorange; color: white; display: fl
 # Character Management
 @ui.page('/characters')
 def characters_page():
-    races = []
-    classnames = []
+    classes, races = utils.get_classes_and_races()
 
     with ui.row():
         ui.label('Characters Management').classes('text-h5')
     with ui.card():
         select_name = ui.input('Name').bind_value(state, 'name')
         select_race = ui.select(
-            options=['Human', 'Elf', 'Dwarf', 'Gnome', 'Orc']).bind_value(state, 'race')
+            options=races, label='Select Race').bind_value(state, 'race')
         select_class = ui.select(
-            options=['1', '2', '3', '4', '5', '6']).bind_value(state, 'class')
+            options=classes, label='Select Class').bind_value(state, 'class')
 
         ui.button('Create Character', on_click=lambda: create_character(state.name, state.race, state.classname))
 
@@ -94,7 +93,7 @@ def create_task(description, xp, expiration_date):
 
 def load_profile_picture():
     try:
-        conn = sqlite3.connect("littleBigDatabase.db")
+        conn = sqlite3.connect("../../littleBigDatabase.db")
         cursor = conn.cursor()
         cursor.execute("SELECT profile_picture FROM user_profile LIMIT 1")
         result = cursor.fetchone()
