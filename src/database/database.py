@@ -11,10 +11,10 @@ def init_db():
     # Create tables if non-existing
     cursor.execute('''CREATE TABLE IF NOT EXISTS char (
                         charID INTEGER PRIMARY KEY AUTOINCREMENT,
-                        profil_image TEXT NOT NULL,
+                        profile_image TEXT NOT NULL,
                         name VARCHAR(50) NOT NULL,
                         race VARCHAR(20) NOT NULL,
-                        roll VARCHAR(20) NOT NULL
+                        classname VARCHAR(20) NOT NULL
     )''')
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS charStat (
@@ -61,7 +61,7 @@ def init_db():
                           FOREIGN KEY (taskID) REFERENCES task(taskID) ON DELETE CASCADE
     )''')
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS class (
+    cursor.execute('''CREATE TABLE IF NOT EXISTS classname (
                           classID INTEGER PRIMARY KEY AUTOINCREMENT,
                           name VARCHAR(50) NOT NULL UNIQUE
     )''')
@@ -90,7 +90,7 @@ def populate_database():
         ('Paladin',),
         ('Ranger',)
     ]
-    cursor.executemany("INSERT OR IGNORE INTO class (name) VALUES (?)", classes)
+    cursor.executemany("INSERT OR IGNORE INTO classname (name) VALUES (?)", classes)
 
     # Rassen hinzufügen
     races = [
