@@ -1,9 +1,13 @@
 import sqlite3
 from src.database.leveling import LevelingSystem
 
+class Database:
+    def create_connection(self):
+        return sqlite3.connect("../../littleBigDatabase.db")
+
 class CharTaskOperations:
-    def __init__(self, db_path="littleBigDatabase.db"):
-        self.db_path = db_path
+    def __init__(self, db):
+        self.db = db
 
     def assign_task_to_character(self, char_id, task_id):
         try:
@@ -102,9 +106,9 @@ class CharTaskOperations:
 
             # XP hinzufügen und Level prüfen
             leveling = LevelingSystem(self.db_path)
-            level_up = leveling.add_xp(char_id, xp_gain)
+            success, level_up = leveling.add_xp(char_id, xp_gain)
 
-            if level_up:
+            if success and level_up:
                 # Stats verbessern, wenn ein Level-Up erreicht wurde
                 leveling.improve_stats_on_level_up(char_id)
                 print(f"Character {char_id} leveled up and stats improved.")
@@ -118,3 +122,4 @@ class CharTaskOperations:
 
         finally:
             connection.close()
+

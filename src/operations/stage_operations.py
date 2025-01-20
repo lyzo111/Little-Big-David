@@ -1,8 +1,12 @@
 import sqlite3
 
+class Database:
+    def create_connection(self):
+        return sqlite3.connect("../../littleBigDatabase.db")
+
 class StageOperations:
-    def __init__(self, db_path="littleBigDatabase.db"):
-        self.db_path = db_path
+    def __init__(self, db):
+        self.db = db
 
     def create_stage(self, stage_name, stage_path):
         try:
@@ -10,7 +14,7 @@ class StageOperations:
                 print("Stage name and path cannot be empty.")
                 return None
 
-            connection = sqlite3.connect(self.db_path)
+            connection = self.db.create_connection()
             cursor = connection.cursor()
 
             cursor.execute(
@@ -27,11 +31,12 @@ class StageOperations:
             return None
 
         finally:
-            connection.close()
+            if 'connection' in locals():
+                connection.close()
 
     def get_stage(self, stage_id):
         try:
-            connection = sqlite3.connect(self.db_path)
+            connection = self.db.create_connection()
             cursor = connection.cursor()
 
             cursor.execute("SELECT * FROM stage WHERE stageID = ?", (stage_id,))
@@ -51,7 +56,7 @@ class StageOperations:
 
     def update_stage(self, stage_id, stage_name=None, stage_path=None):
         try:
-            connection = sqlite3.connect(self.db_path)
+            connection = self.db.create_connection()
             cursor = connection.cursor()
 
             updates = []
@@ -79,11 +84,12 @@ class StageOperations:
             return False
 
         finally:
-            connection.close()
+            if 'connection' in locals():
+                connection.close()
 
     def delete_stage(self, stage_id):
         try:
-            connection = sqlite3.connect(self.db_path)
+            connection = self.db.create_connection()
             cursor = connection.cursor()
 
             cursor.execute("DELETE FROM stage WHERE stageID = ?", (stage_id,))
@@ -96,4 +102,5 @@ class StageOperations:
             return False
 
         finally:
-            connection.close()
+            if 'connection' in locals():
+                connection.close()

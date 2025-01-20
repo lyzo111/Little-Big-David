@@ -1,12 +1,16 @@
 import sqlite3
 
+class Database:
+    def create_connection(self):
+        return sqlite3.connect("../../../littleBigDatabase.db")  # Your actual database path
+
 class LevelingSystem:
-    def __init__(self, db_path="littleBigDatabase.db"):
-        self.db_path = db_path
+    def __init__(self, db):
+        self.db = db
 
     def add_xp(self, char_id, xp_gain):
         try:
-            connection = sqlite3.connect(self.db_path)
+            connection = self.db.create_connection()
             cursor = connection.cursor()
 
             # Aktuelle XP und Level des Charakters abrufen
@@ -49,7 +53,7 @@ class LevelingSystem:
 
     def improve_stats_on_level_up(self, char_id):
         try:
-            connection = sqlite3.connect(self.db_path)
+            connection = self.db.create_connection()
             cursor = connection.cursor()
 
 
