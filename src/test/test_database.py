@@ -12,7 +12,7 @@ if __name__ == "__main__":
     classes = [("Mage",), ("Warrior",), ("Hunter",), ("Shaman",)]
 
     cursor.executemany("INSERT OR IGNORE INTO race (name) VALUES (?)", races)
-    cursor.executemany("INSERT OR IGNORE INTO class (name) VALUES (?)", classes)
+    cursor.executemany("INSERT OR IGNORE INTO classname (name) VALUES (?)", classes)
 
     connection.commit()
 
