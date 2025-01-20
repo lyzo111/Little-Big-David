@@ -2,6 +2,8 @@ from nicegui import ui
 from nicegui.events import KeyEventArguments
 import sqlite3
 from pathlib import Path
+
+from src.database import database
 from src.operations.character import Character
 from src.operations.task_operations import TaskOperations
 from types import SimpleNamespace
@@ -19,26 +21,27 @@ right_button_container = ui.row().classes(
 state = SimpleNamespace(name='', race='', roll='', description='', xp=0, expiration_date='', stage_name='',
                         stage_path='')
 dark_mode = ui.dark_mode()
-is_dark_mode = False  # A variable to track the state of dark mode
+is_dark_mode = False  # Website starts in light mode
 
 # Operation Instances
 char_ops = Character()
-task_ops = TaskOperations()
+task_ops = TaskOperations(database)
 
 
 # Navigation
 def toggle_mode():
     global is_dark_mode
-    is_dark_mode = not is_dark_mode  # Update state
-    dark_mode.toggle()  # Toggle dark mode
-    mode_label.set_text('Dark Mode' if is_dark_mode else 'Light Mode')  # Update the label text
+    is_dark_mode = not is_dark_mode
+    dark_mode.toggle()
+    mode_label.set_text('Dark Mode' if is_dark_mode else 'Light Mode')
 
 
-with (ui.header()):
-    ui.label('Little Big David')
-    ui.link('Characters', '/characters')
-    ui.link('Tasks', '/tasks')
-    ui.link('Tutorial', '/tutorial')
+with (ui.header().style('background-color: #1e293b; color: white;')):
+    with ui.row().style('display: flex; align-items: center;'):
+        ui.label('Little Big David')
+        ui.link('Characters', '/characters')
+        ui.link('Tasks', '/tasks')
+        ui.link('Tutorial', '/tutorial')
     with ui.row().style('margin-left: auto; align-items: center; gap: 8px;'):
         mode_label = ui.label('Light Mode')
         # Lambda prevents toggle method from firing when code is run -> only fires when on_change method is triggered
