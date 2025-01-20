@@ -36,7 +36,7 @@ def toggle_mode():
     mode_label.set_text('Dark Mode' if is_dark_mode else 'Light Mode')
 
 
-with (ui.header().style('background-color: darkorange; color: white; display: flex; align-items: center;')):
+with ui.header().style('background-color: darkorange; color: white; display: flex; align-items: center;'):
     ui.label('Little Big David')
     ui.link('Characters', '/characters').style('color: white;')
     ui.link('Tasks', '/tasks').style('color: white;')
