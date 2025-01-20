@@ -11,15 +11,18 @@ class Character:
 
     def create_character(self, name, race, classname, profile_image=None):
         try:
-            # Validierung: Name, Rasse und Klasse dürfen nicht leer sein
             if not name or not race or not classname:
-                print("Name, Race, and Class cannot be empty.")
                 return {"success": False, "message": "Name, Race, and Class cannot be empty."}
 
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
-            # Validierung: Rasse und Klasse aus vorgegebener Liste prüfen
+            # Prüfen, ob der Name bereits existiert
+            cursor.execute("SELECT 1 FROM char WHERE name = ?", (name,))
+            if cursor.fetchone():
+                return {"success": False, "message": f"A character with the name '{name}' already exists."}
+
+            # Validierung von Rasse und Klasse
             cursor.execute("SELECT 1 FROM race WHERE name = ?", (race,))
             if not cursor.fetchone():
                 return {"success": False, "message": f"Race '{race}' does not exist in the database."}
@@ -28,14 +31,14 @@ class Character:
             if not cursor.fetchone():
                 return {"success": False, "message": f"Class '{classname}' does not exist in the database."}
 
-            # Charakter in die Tabelle einfügen
+            # Charakter einfügen
             cursor.execute(
                 "INSERT INTO char (name, race, classname, profile_image) VALUES (?, ?, ?, ?)",
-                (name, race, classname, profile_image)
+                (name, race, classname, profile_image or "default_pfp.jpg")
             )
             char_id = cursor.lastrowid
 
-            # Standardwerte für die Stats setzen
+            # Standardwerte für Stats
             cursor.execute(
                 "INSERT INTO charStat (charID, level, charisma, crafting, health, strength, defense, intelligence, luck) "
                 "VALUES (?, 1, 10, 10, 10, 10, 10, 10, 10)",
@@ -43,15 +46,9 @@ class Character:
             )
 
             connection.commit()
-            print(f"Character '{name}' was created successfully with ID {char_id}.")
             return {"success": True, "message": f"Character '{name}' was created successfully.", "char_id": char_id}
 
-        except sqlite3.IntegrityError:
-            print(f"A character with the name '{name}' already exists.")
-            return {"success": False, "message": f"A character with the name '{name}' already exists."}
-
         except sqlite3.Error as e:
-            print(f"An error occurred: {e}")
             return {"success": False, "message": f"An error occurred: {e}"}
 
         finally:
