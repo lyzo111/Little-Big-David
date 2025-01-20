@@ -18,6 +18,7 @@ def init_db():
     cursor.execute('''CREATE TABLE IF NOT EXISTS charStat (
                         charID INTEGER,
                         level INT NOT NULL DEFAULT 1,
+                        xp INT NOT NULL DEFAULT 0, 
                         charisma INT NOT NULL DEFAULT 10,
                         crafting INT NOT NULL DEFAULT 10,
                         health INT NOT NULL DEFAULT 10,
@@ -56,6 +57,16 @@ def init_db():
                           PRIMARY KEY (stageID, taskID),
                           FOREIGN KEY (stageID) REFERENCES stage(stageID) ON DELETE CASCADE,
                           FOREIGN KEY (taskID) REFERENCES task(taskID) ON DELETE CASCADE
+      )''')
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS class (
+                          classID INTEGER PRIMARY KEY AUTOINCREMENT,
+                          name VARCHAR(50) NOT NULL UNIQUE
+      )''')
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS race (
+                          raceID INTEGER PRIMARY KEY AUTOINCREMENT,
+                          name VARCHAR(50) NOT NULL UNIQUE
       )''')
 
     # Save changes and close connection
