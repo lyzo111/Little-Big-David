@@ -1,6 +1,6 @@
 # This is a Little Big David.
 import sqlite3
-from nicegui import ui
+from src.gui import gui
 from tutorial import Tutorial
 from src.database.database import init_db, populate_database
 
@@ -18,14 +18,13 @@ def is_first_time() -> bool:
         return not result if result is not None else False
 
 
-if __name__ == '__main__':
+if __name__ in {"__main__", "__mp_main__"}:
     print("Initializing database...")
     init_db()
     populate_database()
+
     if is_first_time():
         Tutorial().show()
         # Add character creation
 
-
-
-    ui.run()
+    gui.initialize_gui()
