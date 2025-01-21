@@ -50,7 +50,8 @@ with ui.header().style('background-color: darkorange; color: white; display: fle
 # Character Management
 @ui.page('/characters')
 def characters_page():
-    classes, races = utils.get_classes_and_races()
+    classes = utils.get_classes()
+    races = utils.get_races()
 
     with ui.row():
         ui.label('Characters Management').classes('text-h5')
