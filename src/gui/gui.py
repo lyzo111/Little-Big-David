@@ -201,4 +201,6 @@ def navigation_buttons():
 
 # Home screen
 update_screen()
-ui.run(title='Little Big RPG', port=8080)
+
+def initialize_gui():
+    ui.run(title='Little Big RPG', port=8080)
