@@ -55,10 +55,10 @@ def characters_page():
     with ui.row():
         ui.label('Characters Management').classes('text-h5')
     with ui.card():
-        select_name = ui.input('Name').bind_value(state, 'name')
-        select_race = ui.select(
+        ui.input('Name').bind_value(state, 'name')
+        ui.select(
             options=races, label='Select Race').bind_value(state, 'race')
-        select_class = ui.select(
+        ui.select(
             options=classes, label='Select Class').bind_value(state, 'class')
 
         ui.button('Create Character', on_click=lambda: create_character(state.name, state.race, state.classname))
