@@ -46,13 +46,12 @@ class Character:
             )
 
             connection.commit()
+            connection.close()
             return {"success": True, "message": f"Character '{name}' was created successfully.", "char_id": char_id}
 
         except sqlite3.Error as e:
             return {"success": False, "message": f"An error occurred: {e}"}
 
-        finally:
-            connection.close()
 
     def read_character_by_id(self, char_id):
         try:
@@ -98,9 +97,11 @@ class Character:
                 values.append(char_id)
                 cursor.execute(query, values)
                 connection.commit()
+                connection.close()
                 print(f"Character with ID {char_id} was updated successfully.")
                 return True
             else:
+                connection.close()
                 print("No updates were provided.")
                 return False
 
@@ -108,8 +109,6 @@ class Character:
             print(f"An error occurred: {e}")
             return False
 
-        finally:
-            connection.close()
 
     def delete_character(self, char_id):
         try:
@@ -119,12 +118,10 @@ class Character:
 
             cursor.execute("DELETE FROM char WHERE charID = ?", (char_id,))
             connection.commit()
+            connection.close()
             print(f"Character with ID {char_id} was deleted successfully.")
             return True
 
         except sqlite3.Error as e:
             print(f"An error occurred: {e}")
             return False
-
-        finally:
-            connection.close()
