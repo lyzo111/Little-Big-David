@@ -2,16 +2,24 @@ from src.database.database import Database
 
 db = Database()
 
-def get_classes_and_races():
+
+def get_data(table_name):
+    query = f"SELECT name FROM {table_name}"
     connection = db.create_connection()
     cursor = connection.cursor()
-
-    cursor.execute("SELECT name FROM classname")
-    classes = [row[0] for row in cursor.fetchall()]
-
-    cursor.execute("SELECT name FROM race")
-    races = [row[0] for row in cursor.fetchall()]
-
+    cursor.execute(query)
+    data = [row[0] for row in cursor.fetchall()]
     connection.close()
-    return classes, races
+    return data
 
+
+def get_classes():
+    return get_data("classname")
+
+
+def get_races():
+    return get_data("race")
+
+
+def get_tasks():
+    return get_data("task")
