@@ -68,21 +68,6 @@ class CharacterOperations:
             print(f"An error occurred: {e}")
             return False
 
-    def delete_character(self, char_id):
-        try:
-            connection = self.db.create_connection()
-            cursor = connection.cursor()
-
-            cursor.execute("DELETE FROM char WHERE charID = ?", (char_id,))
-            connection.commit()
-            connection.close()
-            print(f"Character with ID {char_id} deleted successfully.")
-            return True
-
-        except sqlite3.Error as e:
-            print(f"An error occurred: {e}")
-            return False
-
 
 class CharacterStatsOperations:
     def __init__(self, db):
