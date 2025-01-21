@@ -34,6 +34,7 @@ class CharTaskOperations:
             )
             connection.commit()
             print(f"Task {task_id} successfully assigned to character {char_id}.")
+            connection.close()
             return True
 
         except sqlite3.IntegrityError:
@@ -43,9 +44,6 @@ class CharTaskOperations:
         except sqlite3.Error as e:
             print(f"An error occurred: {e}")
             return False
-
-        finally:
-            connection.close()
 
     def get_tasks_for_character(self, char_id):
         try:
