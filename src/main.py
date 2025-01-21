@@ -19,10 +19,10 @@ def is_first_time() -> bool:
 
 
 if __name__ == '__main__':
+    print("Initializing database...")
+    init_db()
+    populate_database()
     if is_first_time():
-        print("Initializing database...")
-        init_db()
-        populate_database()
         Tutorial().show()
         # Add character creation
 
