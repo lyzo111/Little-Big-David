@@ -1,5 +1,3 @@
-import sqlite3
-
 from src.database.database import Database
 
 db = Database()
