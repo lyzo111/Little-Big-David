@@ -112,12 +112,9 @@ class CharTaskOperations:
                 print(f"Character {char_id} leveled up and stats improved.")
 
             print(f"Task {task_id} marked as completed for character {char_id}.")
+            connection.close()
             return True
 
         except sqlite3.Error as e:
             print(f"An error occurred: {e}")
             return False
-
-        finally:
-            connection.close()
-
