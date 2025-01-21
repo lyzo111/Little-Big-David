@@ -23,8 +23,8 @@ if __name__ in {"__main__", "__mp_main__"}:
     init_db()
     populate_database()
 
-    if is_first_time():
-        Tutorial().show()
+    # if is_first_time():
+        # Tutorial().show()
         # Add character creation
 
     gui.initialize_gui()
