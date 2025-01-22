@@ -28,8 +28,7 @@ is_dark_mode = False  # Website starts in light mode
 char_ops = Character()
 task_ops = TaskOperations(database)
 
-# change switch style
-
+# Change switch style
 ui.add_css('''
 .dark .custom-dark-mode-switch div::before, .dark .custom-dark-mode-switch div::after {
     background-color: black !important;
@@ -134,35 +133,6 @@ def profile_picture_menu():
                 ui.image(f"img:{profile_pic}")
 
 
-def switch_screen(direction):
-    global current_screen
-    current_index = screens.index(current_screen)
-
-    if direction == "right" and current_index < len(screens) - 1:
-        current_screen = screens[current_index + 1]
-    elif direction == "left" and current_index > 0:
-        current_screen = screens[current_index - 1]
-
-    update_screen()
-
-
-def update_screen():
-    content_row.clear()
-    left_button_container.clear()
-    right_button_container.clear()
-
-    profile_picture_menu()
-
-    if current_screen == "main_menu":
-        main_menu()
-    elif current_screen == "character_customization":
-        character_customization()
-    elif current_screen == "overworld":
-        overworld()
-
-    navigation_buttons()
-
-
 # !!! Establish connection to charTasks here. Tasks here are just wild cards
 def main_menu():
     with content_row:
@@ -194,25 +164,6 @@ def overworld():
                 ui.label("Gegner: Böser Boss").classes("mt-4")
                 ui.image("enemy_sprite.png").classes("w-16 h-16")
 
-
-def navigation_buttons():
-    current_index = screens.index(current_screen)
-
-    # Left button
-    if current_index > 0:
-        with left_button_container:
-            ui.button(on_click=lambda: switch_screen("left")).props("fab icon=arrow_back").classes(
-                "rounded-full shadow-lg")
-
-    # Right button
-    if current_index < len(screens) - 1:
-        with right_button_container:
-            ui.button(on_click=lambda: switch_screen("right")).props("fab icon=arrow_forward").classes(
-                "rounded-full shadow-lg")
-
-
-# Home screen
-update_screen()
 
 def initialize_gui():
     ui.run(title='Little Big RPG', port=8080)
