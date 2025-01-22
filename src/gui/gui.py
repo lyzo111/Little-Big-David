@@ -69,9 +69,9 @@ def characters_page():
     with ui.card():
         ui.input('Name').bind_value(state, 'name')
         ui.select(
-            options=races, label='Select Race').bind_value(state, 'race')
+            options=races, label='Races', value=races[0]).bind_value(state, 'race')
         ui.select(
-            options=classes, label='Select Class').bind_value(state, 'class')
+            options=classes, label='Classes', value=classes[0]).bind_value(state, 'class')
 
         ui.button('Create Character', on_click=lambda: create_character(state.name, state.race, state.classname))
 
@@ -163,6 +163,12 @@ def overworld():
                 ui.image("david_sprite.png").classes("w-16 h-16")
                 ui.label("Gegner: Böser Boss").classes("mt-4")
                 ui.image("enemy_sprite.png").classes("w-16 h-16")
+
+
+def layout():
+    main_menu()
+    character_customization()
+    overworld()
 
 
 def initialize_gui():
