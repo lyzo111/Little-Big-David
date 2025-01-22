@@ -1,4 +1,5 @@
 from nicegui import ui
+
 from src.database import utils
 import sqlite3
 from pathlib import Path
@@ -12,7 +13,7 @@ from types import SimpleNamespace
 default_pfp = "default_pfp.jpg"
 current_screen = "main_menu"
 screens = ["overworld", "main_menu", "character_customization"]
-content_row = ui.row().classes("w-screen flex justify-center")  # Container for centering content horizontally
+content_row = ui.row().classes("w-full flex justify-center")  # Container for centering content horizontally
 left_button_container = ui.row().classes("absolute left-4 top-1/2 transform -translate-y-1/2")  # Left button container
 right_button_container = ui.row().classes(
     "absolute right-4 top-1/2 transform -translate-y-1/2")  # Right button container
@@ -27,6 +28,17 @@ is_dark_mode = False  # Website starts in light mode
 char_ops = Character()
 task_ops = TaskOperations(database)
 
+# change switch style
+
+ui.add_css('''
+.dark .custom-dark-mode-switch div::before, .dark .custom-dark-mode-switch div::after {
+    background-color: black !important;
+}
+.dark .custom-dark-mode-switch .q-toggle__track {
+    background-color: white !important;
+}
+''')
+
 
 # Navigation
 def toggle_mode():
@@ -36,7 +48,7 @@ def toggle_mode():
     mode_label.set_text('Dark Mode' if is_dark_mode else 'Light Mode')
 
 
-with ui.header().style('background-color: darkorange; color: white; display: flex; align-items: center;'):
+with ui.header().style('color: white; display: flex; align-items: center;'):
     ui.label('Little Big David')
     ui.link('Characters', '/characters').style('color: white;')
     ui.link('Tasks', '/tasks').style('color: white;')
@@ -44,7 +56,7 @@ with ui.header().style('background-color: darkorange; color: white; display: fle
     with ui.row().style('margin-left: auto; align-items: center; gap: 8px;'):
         mode_label = ui.label('Light Mode')
         # Lambda prevents toggle method from firing when code is run -> only fires when on_change method is triggered
-        brightness_switch = ui.switch(on_change=(lambda e: toggle_mode()))
+        brightness_switch = ui.switch(on_change=(lambda e: toggle_mode())).classes('custom-dark-mode-switch')
 
 
 # Character Management
