@@ -69,7 +69,7 @@ def characters_page():
     with ui.card():
         ui.input('Name').bind_value(state, 'name')
         ui.select(
-            options=races, label='Races', value=races[0]).bind_value(state, 'race')
+            options=races, label='Races', value=races[0]).bind_value(state, 'races')
         ui.select(
             options=classes, label='Classes', value=classes[0]).bind_value(state, 'class')
 
