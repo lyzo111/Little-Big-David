@@ -170,6 +170,7 @@ def layout():
     character_customization()
     overworld()
 
+layout()
 
 def initialize_gui():
     ui.run(title='Little Big RPG', port=8080)
