@@ -66,12 +66,14 @@ def characters_page():
 
     with ui.row():
         ui.label('Characters Management').classes('text-h5')
-    with ui.card():
+    with (ui.card()):
         ui.input('Name').bind_value(state, 'name')
         ui.select(
             options=races, label='Races', value=races[0]).bind_value(state, 'races')
         ui.select(
             options=classes, label='Classes', value=classes[0]).bind_value(state, 'class')
+        ui.upload(on_upload=(lambda e: ui.notify(f'Uploaded: {e.name}')), on_rejected=lambda e: ui.notify('Rejected!')
+                  ).props('accept="image/*"')
 
         ui.button('Create Character', on_click=lambda: create_character(state.name, state.race, state.classname))
 
