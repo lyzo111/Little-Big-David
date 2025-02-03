@@ -54,40 +54,54 @@ with ui.header().style('color: white; display: flex; align-items: center;'):
     ui.link('Tutorial', '/tutorial').style('color: white;')
     with ui.row().style('margin-left: auto; align-items: center; gap: 8px;'):
         mode_label = ui.label('Light Mode')
-        # Lambda prevents toggle method from firing when code is run -> only fires when on_change method is triggered
         brightness_switch = ui.switch(on_change=(lambda e: toggle_mode())).classes('custom-dark-mode-switch')
 
 
 # Character Management
-@ui.page('/characters')
-def characters_page():
+def characters_dialog():
     classes = utils.get_classes()
     races = utils.get_races()
 
-    with ui.row():
-        ui.label('Characters Management').classes('text-h5')
-    with (ui.card()):
-        ui.input('Name').bind_value(state, 'name')
-        ui.select(
-            options=races, label='Races', value=races[0]).bind_value(state, 'races')
-        ui.select(
-            options=classes, label='Classes', value=classes[0]).bind_value(state, 'class')
-        ui.upload(on_upload=(lambda e: ui.notify(f'Uploaded: {e.name}')), on_rejected=lambda e: ui.notify('Rejected!')
-                  ).props('accept="image/*"')
+    with ui.dialog() as character_dialog, ui.card():
+        with ui.row():
+            ui.label('Characters Management').classes('text-h5')
+        with (ui.card()):
+            ui.input('Name').bind_value(state, 'name')
+            ui.select(
+                options=races, label='Races', value=races[0]).bind_value(state, 'races')
+            ui.select(
+                options=classes, label='Classes', value=classes[0]).bind_value(state, 'class')
+            ui.upload(on_upload=(lambda e: ui.notify(f'Uploaded: {e.name}')), on_rejected=lambda e: ui.notify('Rejected!')
+                      ).props('accept="image/*"')
 
-        ui.button('Create Character', on_click=lambda: create_character(state.name, state.race, state.classname))
+            ui.button('Create Character', on_click=lambda: create_character(state.name, state.race, state.classname))
+    return character_dialog
+
+
+# Date Input
+def date_input():
+    with ui.input('Date') as date:
+        with ui.menu().props('no-parent-event') as menu:
+            with ui.date().bind_value(date):
+                with ui.row().classes('justify-end'):
+                    ui.button('Close', on_click=menu.close).props('flat')
+        with date.add_slot('append'):
+            ui.icon('edit_calendar').on('click', menu.open).classes('cursor-pointer')
+    return date
 
 
 # Task Management
-@ui.page('/tasks')
-def tasks_page():
-    with ui.row():
-        ui.label('Tasks Management').classes('text-h5')
-    with ui.card():
-        ui.input('Description').bind_value(state, 'description')
-        ui.input('XP').bind_value(state, 'xp')
-        ui.input('Expiration Date').bind_value(state, 'expiration_date')
-        ui.button('Create Task', on_click=lambda: create_task(state.description, state.xp, state.expiration_date))
+def tasks_dialog():
+    with ui.dialog() as task_dialog, ui.card():
+        with ui.row():
+            ui.label('Tasks Management').classes('text-h5')
+        with ui.card():
+            ui.input('Description').bind_value(state, 'description')
+            ui.input('XP').bind_value(state, 'xp')
+            date_input().bind_value(state, 'expiration_date')
+            ui.button('Create Task',
+                      on_click=lambda: create_task(state.description, state.xp, state.expiration_date))
+    return task_dialog
 
 
 # Functions
@@ -101,17 +115,15 @@ def create_task(description, xp, expiration_date):
     ui.notify('Task created successfully!')
 
 
-# ------------------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------------
-
-
 def load_profile_picture():
     try:
         conn = sqlite3.connect("../../littleBigDatabase.db")
         cursor = conn.cursor()
+
         cursor.execute("SELECT profile_picture FROM user_profile LIMIT 1")
         result = cursor.fetchone()
         profile_pic = result[0] if result and result[0] else default_pfp
+
         if not Path(profile_pic).is_file():
             return default_pfp
         return profile_pic
@@ -122,9 +134,9 @@ def load_profile_picture():
 
 def toggle_profile_menu():
     with ui.menu():
-        ui.menu_item("Einstellungen", on_click=lambda: ui.notify("Einstellungen öffnen"))
-        ui.menu_item("Tutorial erneut starten", on_click=lambda: ui.notify("Tutorial wird gestartet"))
-        ui.menu_item("Disclaimer", on_click=lambda: ui.notify("Little Big David ist ein Spiel..."))
+        ui.menu_item("Settings", on_click=lambda: ui.notify("Opening settings"))
+        ui.menu_item("Restart Tutorial", on_click=lambda: ui.notify("Tutorial was restarted"))
+        ui.menu_item("Disclaimer", on_click=lambda: ui.notify("Little Big David is just a game..."))
 
 
 def profile_picture_menu():
@@ -136,43 +148,47 @@ def profile_picture_menu():
 
 
 # !!! Establish connection to charTasks here. Tasks here are just wild cards
-def main_menu():
+def quests():
     with content_row:
         with ui.column().classes("items-center justify-center"):
-            ui.label("Little Big David - Aufgaben").classes("text-2xl font-bold mb-4")
-            ui.label("Hier stehen deine Aufgaben:").classes("mb-4")
-            with ui.card().classes("w-1/2"):
-                ui.label("1. Trainiere für 30 Minuten").classes("mb-2")
-                ui.label("2. Lies ein Buchkapitel").classes("mb-2")
-                ui.label("3. Trinke 2 Liter Wasser").classes("mb-2")
+            ui.label("Quests").classes("text-2xl font-bold mb-4")
+            ui.label("Here are your quests:").classes("mb-4")
+            with ui.card():
+                ui.label("1. Train for 30 minutes").classes("mb-2")
+                ui.label("2. Read a chapter of any book").classes("mb-2")
+                ui.label("3. Drink 2 liters of water").classes("mb-2")
+                with ui.column().classes("items-center"):
+                    ui.button('Add Task', on_click=tasks_dialog)
 
 
 def character_customization():
     with content_row:
         with ui.column().classes("items-center justify-center"):
-            ui.label("Charakteranpassung").classes("text-2xl font-bold mb-4")
-            ui.label("Hier kannst du deinen Charakter anpassen!").classes("mb-4")
-            ui.label("Noch keine Anpassungsoptionen implementiert...").classes("mb-2")
+            ui.label("Character Editor").classes("text-2xl font-bold mb-4")
+            ui.label("Here you can configure your character!").classes("mb-4")
+            ui.label("No options for configuration implemented yet...").classes("mb-2")
 
 
 # !!! Get path for .png from littleBigDatabase.db
 def overworld():
     with content_row:
         with ui.column().classes("items-center justify-center"):
-            ui.label("Overworld - Deine Reise").classes("text-2xl font-bold mb-4")
+            ui.label("Overworld - Your Journey").classes("text-2xl font-bold mb-4")
+            ui.label("Here you can see David on his journey:").classes("mb-4")
             with ui.card().classes("items-center justify-center p-4"):
-                ui.label("Hier siehst du David auf seiner Reise:")
                 ui.image("david_sprite.png").classes("w-16 h-16")
-                ui.label("Gegner: Böser Boss").classes("mt-4")
+                ui.label("Enemy: Big Boss >:c").classes("mt-4")
                 ui.image("enemy_sprite.png").classes("w-16 h-16")
 
 
 def layout():
-    main_menu()
+    quests()
     character_customization()
     overworld()
 
+
 layout()
+
 
 def initialize_gui():
     ui.run(title='Little Big RPG', port=8080)
