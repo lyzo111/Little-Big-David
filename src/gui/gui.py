@@ -157,8 +157,7 @@ def quests():
                 ui.label("1. Train for 30 minutes").classes("mb-2")
                 ui.label("2. Read a chapter of any book").classes("mb-2")
                 ui.label("3. Drink 2 liters of water").classes("mb-2")
-                with ui.column().classes("items-center"):
-                    ui.button('Add Task', on_click=tasks_dialog)
+                ui.button('Add Task', on_click=tasks_dialog).style('display: block; align-self: center;')
 
 
 def character_customization():
