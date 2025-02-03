@@ -1,7 +1,9 @@
+import sqlite3
+import datetime
+
 from nicegui import ui
 
 from src.database import utils
-import sqlite3
 from pathlib import Path
 
 from src.database import database
@@ -80,13 +82,29 @@ def characters_dialog():
 
 # Date Input
 def date_input():
+    def format_date(value):
+        # Convert 'yyyy-mm-dd' to 'dd.mm.yyyy' for display
+        if value:
+            return datetime.datetime.strptime(value, "%Y-%m-%d").strftime("%d.%m.%Y")
+        return ""
+
+    def parse_date(value):
+        # Convert 'dd.mm.yyyy' back to 'yyyy-mm-dd' for internal storage
+        try:
+            return datetime.datetime.strptime(value, "%d.%m.%Y").strftime("%Y-%m-%d")
+        except ValueError:
+            return ""
+
     with ui.input('Date') as date:
         with ui.menu().props('no-parent-event') as menu:
-            with ui.date().bind_value(date):
+            with ui.date().bind_value(date, forward=format_date, backward=parse_date):
+
                 with ui.row().classes('justify-end'):
                     ui.button('Close', on_click=menu.close).props('flat')
+
         with date.add_slot('append'):
             ui.icon('edit_calendar').on('click', menu.open).classes('cursor-pointer')
+
     return date
 
 
