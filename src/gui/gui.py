@@ -183,7 +183,9 @@ def character_customization():
         with ui.column().classes("items-center justify-center"):
             ui.label("Character Editor").classes("text-2xl font-bold mb-4")
             ui.label("Here you can configure your character!").classes("mb-4")
-            ui.label("No options for configuration implemented yet...").classes("mb-2")
+            ui.image(load_profile_picture()).classes("w-16 h-16 cursor-pointer"
+            ).on('click', characters_dialog
+                 ).style('border-color: black; border-width: 2px; border-style: solid; border-radius: 50%;')
 
 
 # !!! Get path for .png from littleBigDatabase.db
