@@ -1,7 +1,9 @@
 import sqlite3
 
-
 def init_db():
+    """
+    Initializes the database by creating necessary tables if they do not exist.
+    """
     # Connect to database and create if non-existing
     connection = sqlite3.connect('../../littleBigDatabase.db')
 
@@ -75,8 +77,10 @@ def init_db():
     connection.commit()
     connection.close()
 
-
 def populate_database():
+    """
+    Populates the database with initial data for classes, races, and tasks.
+    """
     # Verbindung zur Datenbank herstellen
     connection = sqlite3.connect('../../littleBigDatabase.db')
     cursor = connection.cursor()
@@ -120,14 +124,16 @@ def populate_database():
 
     print("Datenbanken wurden erfolgreich befüllt.")
 
-
-# **Neue Database-Klasse hinzufügen**
 class Database:
     def create_connection(self):
-        return sqlite3.connect("../../littleBigDatabase.db")
+        """
+        Creates and returns a connection to the SQLite database.
 
+        Returns:
+            sqlite3.Connection: The connection object to the SQLite database.
+        """
+        return sqlite3.connect("../../littleBigDatabase.db")
 
 if __name__ == "__main__":
     init_db()
     populate_database()
-
