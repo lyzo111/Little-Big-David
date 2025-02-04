@@ -11,14 +11,13 @@ from src.operations.character import Character
 from src.operations.task_operations import TaskOperations
 from types import SimpleNamespace
 
-# Global Variables
+"""
+This module contains the GUI implementation for the Little Big RPG game.
+It uses the NiceGUI framework to create and manage the user interface.
+"""
+
 default_pfp = "assets/default_pfp.jpg"
-current_screen = "main_menu"
-screens = ["overworld", "main_menu", "character_customization"]
 content_row = ui.row().classes("w-full flex justify-center")  # Container for centering content horizontally
-left_button_container = ui.row().classes("absolute left-4 top-1/2 transform -translate-y-1/2")  # Left button container
-right_button_container = ui.row().classes(
-    "absolute right-4 top-1/2 transform -translate-y-1/2")  # Right button container
 
 # State Objects
 state = SimpleNamespace(name='', race='', classname='', description='', xp=0, expiration_date='', stage_name='',
@@ -41,8 +40,14 @@ ui.add_css('''
 ''')
 
 
-# Navigation
 def toggle_mode():
+    """
+    Toggles the website's mode between dark and light.
+
+    This function switches the global `is_dark_mode` variable between True and False,
+    toggles the `dark_mode` UI element, and updates the `mode_label` text to reflect
+    the current mode.
+    """
     global is_dark_mode
     is_dark_mode = not is_dark_mode
     dark_mode.toggle()
@@ -58,6 +63,17 @@ with ui.header().style('color: white; display: flex; align-items: center;'):
 
 # Character Management
 def characters_dialog():
+    """
+   Creates and returns a dialog for character management.
+
+   This function retrieves available classes and races using utility functions,
+   and constructs a dialog with input fields for character name, race, and class.
+   It also includes an upload button for profile pictures and a button to create
+   a new character.
+
+   Returns:
+       ui.dialog: The constructed character management dialog.
+    """
     classes = utils.get_classes()
     races = utils.get_races()
 
@@ -77,16 +93,41 @@ def characters_dialog():
     return character_dialog
 
 
-# Date Input
 def date_input():
+    """
+    Creates and returns a date input field with a custom date format.
+
+    This function constructs a date input field that displays dates in 'dd.mm.yyyy'
+    format and converts them back to 'yyyy-mm-dd' format for internal storage. It
+    includes a calendar icon to open a date picker menu.
+
+    Returns:
+        ui.input: The constructed date input field.
+    """
     def format_date(value):
-        # Convert 'yyyy-mm-dd' to 'dd.mm.yyyy' for display
+        """
+        Converts a date from 'yyyy-mm-dd' format to 'dd.mm.yyyy' format.
+
+        Args:
+            value (str): The date in 'yyyy-mm-dd' format.
+
+        Returns:
+            str: The date in 'dd.mm.yyyy' format, or an empty string if the input is None.
+        """
         if value:
             return datetime.datetime.strptime(value, "%Y-%m-%d").strftime("%d.%m.%Y")
         return ""
 
     def parse_date(value):
-        # Convert 'dd.mm.yyyy' back to 'yyyy-mm-dd' for internal storage
+        """
+        Converts a date from 'dd.mm.yyyy' format to 'yyyy-mm-dd' format.
+
+        Args:
+            value (str): The date in 'dd.mm.yyyy' format.
+
+        Returns:
+            str: The date in 'yyyy-mm-dd' format, or an empty string if the input is invalid.
+        """
         try:
             return datetime.datetime.strptime(value, "%d.%m.%Y").strftime("%Y-%m-%d")
         except ValueError:
@@ -107,6 +148,15 @@ def date_input():
 
 # Task Management
 def tasks_dialog():
+    """
+    Creates and returns a dialog for task management.
+
+    This function constructs a dialog with input fields for task description, XP,
+    and expiration date. It includes a button to create a new task.
+
+    Returns:
+        ui.dialog: The constructed task management dialog.
+    """
     with ui.dialog() as task_dialog, ui.card():
         with ui.row():
             ui.label('Tasks Management').classes('text-h5')
@@ -121,6 +171,18 @@ def tasks_dialog():
 
 # Functions
 def create_character(name, race, classname):
+    """
+    Creates a new character with the given name, race, and class.
+
+    This function uses the `char_ops` instance to create a new character. If the
+    character is created successfully, it displays a success notification and closes
+    the character dialog. Otherwise, it displays an error notification.
+
+    Args:
+        name (str): The name of the character.
+        race (str): The race of the character.
+        classname (str): The class of the character.
+    """
     if char_ops.create_character(name, race, classname):
         ui.notify('Character created successfully!')
         characters_dialog().close()
@@ -129,6 +191,18 @@ def create_character(name, race, classname):
 
 
 def create_task(description, xp, expiration_date):
+    """
+    Creates a new task with the given description, XP, and expiration date.
+
+    This function uses the `task_ops` instance to create a new task. If the task is
+    created successfully, it displays a success notification and closes the task
+    dialog. Otherwise, it displays an error notification.
+
+    Args:
+        description (str): The description of the task.
+        xp (int): The XP value of the task.
+        expiration_date (str): The expiration date of the task in 'yyyy-mm-dd' format.
+    """
     if task_ops.create_task(description, xp, expiration_date):
         ui.notify('Task created successfully!')
         tasks_dialog().close()
@@ -137,6 +211,15 @@ def create_task(description, xp, expiration_date):
 
 
 def load_profile_picture():
+    """
+    Loads the profile picture for the user.
+
+    This function connects to the database to retrieve the profile picture path for the user.
+    If the profile picture is not found or the file does not exist, it returns the default profile picture path.
+
+    Returns:
+        str: The path to the profile picture.
+    """
     try:
         conn = sqlite3.connect("../../littleBigDatabase.db")
         cursor = conn.cursor()
@@ -154,6 +237,11 @@ def load_profile_picture():
 
 
 def toggle_profile_menu():
+    """
+    Toggles the profile menu.
+
+    This function creates a menu with options for settings, restarting the tutorial, and displaying a disclaimer.
+    """
     with ui.menu():
         ui.menu_item("Settings", on_click=lambda: ui.notify("Opening settings"))
         ui.menu_item("Restart Tutorial", on_click=lambda: ui.notify("Tutorial was restarted"))
@@ -161,15 +249,26 @@ def toggle_profile_menu():
 
 
 def profile_picture_menu():
+    """
+    Displays the profile picture menu.
+
+    This function loads the profile picture and creates a button with the profile picture.
+    Clicking the button toggles the profile menu.
+    """
     profile_pic = load_profile_picture()
     with ui.row().classes("absolute top-4 right-4"):
         with ui.button(on_click=toggle_profile_menu).classes("rounded-full p-0 w-16 h-16 cursor-pointer shadow-lg"):
             with ui.avatar():
-                ui.image(f"img:{profile_pic}")
+                ui.image(load_profile_picture())
 
 
 # !!! Establish connection to charTasks here. Tasks here are just wild cards
 def quests():
+    """
+    Displays the quests section.
+
+    This function creates a section in the UI to display the user's quests and includes a button to add new tasks.
+    """
     with content_row:
         with ui.column().classes("items-center justify-center"):
             ui.label("Quests").classes("text-2xl font-bold mb-4")
@@ -182,6 +281,12 @@ def quests():
 
 
 def character_customization():
+    """
+    Displays the character customization section.
+
+    This function creates a section in the UI for character customization, including an image of the profile picture
+    and a button to open the character management dialog.
+    """
     with content_row:
         with ui.column().classes("items-center justify-center"):
             ui.label("Character Editor").classes("text-2xl font-bold mb-4")
@@ -193,6 +298,11 @@ def character_customization():
 
 # !!! Get path for .png from littleBigDatabase.db
 def journey():
+    """
+    Displays the journey section.
+
+    This function creates a section in the UI to display the user's journey, including images of the character and enemy.
+    """
     with content_row:
         with ui.column().classes("items-center justify-center"):
             ui.label("Your Journey").classes("text-2xl font-bold mb-4")
@@ -204,6 +314,11 @@ def journey():
 
 
 def layout():
+    """
+    Sets up the layout of the application.
+
+    This function calls the functions to display the quests, character customization, and journey sections.
+    """
     quests()
     character_customization()
     journey()
@@ -213,4 +328,9 @@ layout()
 
 
 def initialize_gui():
+    """
+    Initializes and runs the GUI.
+
+    This function sets the title and port for the NiceGUI application and starts the UI.
+    """
     ui.run(title='Little Big RPG', port=8080)
