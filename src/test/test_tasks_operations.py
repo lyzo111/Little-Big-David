@@ -2,26 +2,30 @@ from src.database.database import Database
 from src.operations.task_operations import TaskOperations
 
 if __name__ == "__main__":
-    # Initialisiere das Datenbankobjekt
+    """
+    Main script to create, retrieve, update, and delete a task using the TaskOperations class.
+    """
+
+    # Initialize the database object
     db = Database()
 
-    # Übergabe des Datenbankobjekts an TaskOperations
+    # Pass the database object to TaskOperations
     task_ops = TaskOperations(db)
 
-    # Aufgabe erstellen
+    # Create a task
     task_id = task_ops.create_task("Defeat the Lich King", 50, "2025-01-31")
 
-    # Aufgabe abrufen
+    # Retrieve the task
     task_ops.get_task(task_id)
 
-    # Aufgabe aktualisieren
+    # Update the task
     task_ops.update_task(task_id, description="Defeat Arthas", xp=75, expiration_date="2025-02-15")
 
-    # Aufgabe erneut abrufen
+    # Retrieve the task again
     task_ops.get_task(task_id)
 
-    # Aufgabe löschen
+    # Delete the task
     task_ops.delete_task(task_id)
 
-    # Gelöschte Aufgabe abrufen
+    # Retrieve the deleted task
     task_ops.get_task(task_id)

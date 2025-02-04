@@ -2,33 +2,40 @@ from src.database.database import Database
 from src.operations.character import Character
 
 if __name__ == "__main__":
+    """
+    Main script to create, retrieve, update, and delete a character using the Character class.
+    """
+
+    # Create the database instance
     db = Database()
+
+    # Create the Character operations instance
     char_ops = Character()
 
-    # Charakter erstellen
+    # Create a character
     char_result = char_ops.create_character(name="Arthas", race="Human", classname="Paladin", profile_image=None)
     if char_result["success"]:
         char_id = char_result["char_id"]
-        print(f"Charakter erstellt mit ID: {char_id}")
+        print(f"Character created with ID: {char_id}")
 
-        # Charakter abrufen
-        print("\nCharakter abrufen:")
+        # Retrieve the character
+        print("\nRetrieve character:")
         char_ops.read_character_by_id(char_id)
 
-        # Charakter aktualisieren
-        print("\nCharakter aktualisieren:")
+        # Update the character
+        print("\nUpdate character:")
         char_ops.update_character(char_id, new_name="Arthas Menethil", new_race="Undead", new_classname="Death Knight")
 
-        # Aktualisierten Charakter erneut abrufen
-        print("\nAktualisierter Charakter abrufen:")
+        # Retrieve the updated character
+        print("\nRetrieve updated character:")
         char_ops.read_character_by_id(char_id)
 
-        # Charakter löschen
-        print("\nCharakter löschen:")
+        # Delete the character
+        print("\nDelete character:")
         char_ops.delete_character(char_id)
 
-        # Gelöschten Charakter abrufen
-        print("\nGelöschten Charakter abrufen:")
+        # Attempt to retrieve the deleted character
+        print("\nRetrieve deleted character:")
         char_ops.read_character_by_id(char_id)
     else:
-        print(f"Fehler beim Erstellen des Charakters: {char_result['message']}")
+        print(f"Error creating character: {char_result['message']}")
