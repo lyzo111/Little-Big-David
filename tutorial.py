@@ -1,9 +1,11 @@
-# tutorial.py
 from nicegui import ui
 
 
 class Tutorial:
     def __init__(self):
+        """
+        Initialize the Tutorial class with the current step set to 0 and predefined tutorial steps.
+        """
         self.current_step = 0
         self.tutorial_steps = [
             {"title": "Willkommen bei Little Big David!",
@@ -24,16 +26,25 @@ class Tutorial:
         ]
 
     def next_step(self):
+        """
+        Move to the next step in the tutorial if not already at the last step.
+        """
         if self.current_step < len(self.tutorial_steps) - 1:
             self.current_step += 1
             self.update_ui()
 
     def previous_step(self):
+        """
+        Move to the previous step in the tutorial if not already at the first step.
+        """
         if self.current_step > 0:
             self.current_step -= 1
             self.update_ui()
 
     def skip_tutorial(self):
+        """
+        Display a dialog to confirm if the user wants to skip the tutorial.
+        """
         with ui.dialog() as dialog:
             with ui.card():
                 ui.label("Tutorial wirklich überspringen?")
@@ -42,6 +53,9 @@ class Tutorial:
                     ui.button("Nein", on_click=dialog.close)
 
     def end_tutorial(self, dialog):
+        """
+        End the tutorial, close the dialog, and clear the tutorial UI.
+        """
         dialog.close()
         ui.notify("Tutorial beendet!")
         self.tutorial_ui.clear()
@@ -49,12 +63,18 @@ class Tutorial:
             ui.label("Willkommen in Little Big David! Viel Spaß beim Spielen!").classes("text-xl font-bold mt-10")
 
     def update_ui(self):
+        """
+        Update the UI elements to reflect the current step in the tutorial.
+        """
         step = self.tutorial_steps[self.current_step]
         self.title.content = step["title"]
         self.description.content = step["description"]
         self.progress_bar.value = (self.current_step + 1) / len(self.tutorial_steps)
 
     def show(self):
+        """
+        Display the tutorial UI with navigation buttons and progress bar.
+        """
         with ui.column().classes("items-center justify-center") as self.tutorial_ui:
             with ui.card().classes("w-1/2"):
                 self.title = ui.label().classes("text-xl font-bold mb-4")
