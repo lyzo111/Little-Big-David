@@ -12,7 +12,7 @@ from src.operations.task_operations import TaskOperations
 from types import SimpleNamespace
 
 # Global Variables
-default_pfp = "default_pfp.jpg"
+default_pfp = "assets/default_pfp.jpg"
 current_screen = "main_menu"
 screens = ["overworld", "main_menu", "character_customization"]
 content_row = ui.row().classes("w-full flex justify-center")  # Container for centering content horizontally
