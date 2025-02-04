@@ -2,13 +2,37 @@ import sqlite3
 
 class Database:
     def create_connection(self):
+        """
+        Creates and returns a connection to the SQLite database.
+
+        Returns:
+            sqlite3.Connection: The connection object to the SQLite database.
+        """
         return sqlite3.connect("../../littleBigDatabase.db")  # Your actual database path
 
 class CharTaskOperations:
     def __init__(self, db):
+        """
+        Initializes a new instance of the CharTaskOperations class.
+
+        Args:
+            db (Database): The database instance to use for database operations.
+        """
         self.db = db
 
     def assign_task_to_character(self, char_id, task_id):
+        """
+        Assigns a task to a character.
+
+        This function checks if the character and task exist, and then assigns the task to the character.
+
+        Args:
+            char_id (int): The ID of the character.
+            task_id (int): The ID of the task.
+
+        Returns:
+            bool: True if the task was successfully assigned, False otherwise.
+        """
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
@@ -45,6 +69,17 @@ class CharTaskOperations:
             connection.close()
 
     def get_tasks_for_character(self, char_id):
+        """
+        Retrieves tasks assigned to a character.
+
+        This function fetches all tasks assigned to the specified character.
+
+        Args:
+            char_id (int): The ID of the character.
+
+        Returns:
+            list: A list of tasks assigned to the character.
+        """
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
@@ -70,6 +105,18 @@ class CharTaskOperations:
             return []
 
     def mark_task_as_completed(self, char_id, task_id):
+        """
+        Marks a task as completed for a character.
+
+        This function removes the task assignment from the character.
+
+        Args:
+            char_id (int): The ID of the character.
+            task_id (int): The ID of the task.
+
+        Returns:
+            bool: True if the task was successfully marked as completed, False otherwise.
+        """
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()

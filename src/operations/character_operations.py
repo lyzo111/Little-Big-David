@@ -3,17 +3,40 @@ from src.database.leveling import LevelingSystem
 
 class Database:
     def create_connection(self):
+        """
+        Creates and returns a connection to the SQLite database.
+
+        Returns:
+            sqlite3.Connection: The connection object to the SQLite database.
+        """
         return sqlite3.connect("../../littleBigDatabase.db")
 
 class CharTaskOperations:
     def __init__(self, db):
+        """
+        Initializes a new instance of the CharTaskOperations class.
+
+        Args:
+            db (Database): The database instance to use for database operations.
+        """
         self.db = db
 
     def assign_task_to_character(self, char_id, task_id):
+        """
+        Assigns a task to a character.
+
+        This function checks if the character and task exist, and then assigns the task to the character.
+
+        Args:
+            char_id (int): The ID of the character.
+            task_id (int): The ID of the task.
+
+        Returns:
+            bool: True if the task was successfully assigned, False otherwise.
+        """
         try:
             connection = sqlite3.connect(self.db_path)
             cursor = connection.cursor()
-
 
             cursor.execute("SELECT * FROM char WHERE charID = ?", (char_id,))
             character = cursor.fetchone()
@@ -26,7 +49,6 @@ class CharTaskOperations:
             if not task:
                 print(f"Task with ID {task_id} does not exist.")
                 return False
-
 
             cursor.execute(
                 "INSERT INTO charTask (charID, taskID) VALUES (?, ?)",
@@ -46,13 +68,23 @@ class CharTaskOperations:
             return False
 
     def get_tasks_for_character(self, char_id):
+        """
+        Retrieves tasks assigned to a character.
+
+        This function fetches all tasks assigned to the specified character.
+
+        Args:
+            char_id (int): The ID of the character.
+
+        Returns:
+            list: A list of tasks assigned to the character.
+        """
         try:
             connection = sqlite3.connect(self.db_path)
             cursor = connection.cursor()
 
-
             cursor.execute("""
-                SELECT t.taskID, t.description, t.XP, t.expirationDate 
+                SELECT t.taskID, t.description, t.XP, t.expirationDate
                 FROM charTask ct
                 JOIN task t ON ct.taskID = t.taskID
                 WHERE ct.charID = ?
@@ -72,11 +104,22 @@ class CharTaskOperations:
             return []
 
     def mark_task_as_completed(self, char_id, task_id):
+        """
+        Marks a task as completed for a character.
+
+        This function removes the task assignment from the character and adds XP to the character.
+
+        Args:
+            char_id (int): The ID of the character.
+            task_id (int): The ID of the task.
+
+        Returns:
+            bool: True if the task was successfully marked as completed, False otherwise.
+        """
         try:
             connection = sqlite3.connect(self.db_path)
             cursor = connection.cursor()
 
-            # Überprüfen, ob die Aufgabe dem Charakter zugewiesen ist
             cursor.execute(
                 "SELECT * FROM charTask WHERE charID = ? AND taskID = ?",
                 (char_id, task_id)
@@ -86,7 +129,6 @@ class CharTaskOperations:
                 print(f"Task {task_id} is not assigned to character {char_id}.")
                 return False
 
-            # XP der Aufgabe abrufen
             cursor.execute("SELECT XP FROM task WHERE taskID = ?", (task_id,))
             task = cursor.fetchone()
             if not task:
@@ -95,19 +137,16 @@ class CharTaskOperations:
 
             xp_gain = task[0]
 
-            # Aufgabe als abgeschlossen markieren (löschen)
             cursor.execute(
                 "DELETE FROM charTask WHERE charID = ? AND taskID = ?",
                 (char_id, task_id)
             )
             connection.commit()
 
-            # XP hinzufügen und Level prüfen
             leveling = LevelingSystem(self.db_path)
             success, level_up = leveling.add_xp(char_id, xp_gain)
 
             if success and level_up:
-                # Stats verbessern, wenn ein Level-Up erreicht wurde
                 leveling.improve_stats_on_level_up(char_id)
                 print(f"Character {char_id} leveled up and stats improved.")
 
