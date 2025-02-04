@@ -11,18 +11,18 @@ class Character:
 
     def create_character(self, name, race, classname, profile_image=None):
         try:
-            if not name or not race or not classname:
+            if not name or name == "" or not race or not classname:
                 return {"success": False, "message": "Name, Race, and Class cannot be empty."}
 
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
-            # Prüfen, ob der Name bereits existiert
+            # Check if name already exists
             cursor.execute("SELECT 1 FROM char WHERE name = ?", (name,))
             if cursor.fetchone():
                 return {"success": False, "message": f"A character with the name '{name}' already exists."}
 
-            # Validierung von Rasse und Klasse
+            # Validating race and class
             cursor.execute("SELECT 1 FROM race WHERE name = ?", (race,))
             if not cursor.fetchone():
                 return {"success": False, "message": f"Race '{race}' does not exist in the database."}
@@ -31,14 +31,14 @@ class Character:
             if not cursor.fetchone():
                 return {"success": False, "message": f"Class '{classname}' does not exist in the database."}
 
-            # Charakter einfügen
+            # Insert character into database
             cursor.execute(
                 "INSERT INTO char (name, race, classname, profile_image) VALUES (?, ?, ?, ?)",
                 (name, race, classname, profile_image or "default_pfp.jpg")
             )
             char_id = cursor.lastrowid
 
-            # Standardwerte für Stats
+            # Setting default values for character
             cursor.execute(
                 "INSERT INTO charStat (charID, level, charisma, crafting, health, strength, defense, intelligence, luck) "
                 "VALUES (?, 1, 10, 10, 10, 10, 10, 10, 10)",
@@ -58,7 +58,7 @@ class Character:
             connection = self.db.create_connection()
             cursor = connection.cursor()
 
-            # Charakterdaten abrufen
+            # Call character values by ID
             cursor.execute("SELECT * FROM char WHERE charID = ?", (char_id,))
             user = cursor.fetchone()
 
