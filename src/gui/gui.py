@@ -50,10 +50,7 @@ def toggle_mode():
 
 
 with ui.header().style('color: white; display: flex; align-items: center;'):
-    ui.label('Little Big David')
-    ui.link('Characters', '/characters').style('color: white;')
-    ui.link('Tasks', '/tasks').style('color: white;')
-    ui.link('Tutorial', '/tutorial').style('color: white;')
+    ui.label('Little Big David').classes('text-h6')
     with ui.row().style('margin-left: auto; align-items: center; gap: 8px;'):
         mode_label = ui.label('Light Mode')
         brightness_switch = ui.switch(on_change=(lambda e: toggle_mode())).classes('custom-dark-mode-switch')
@@ -124,13 +121,19 @@ def tasks_dialog():
 
 # Functions
 def create_character(name, race, classname):
-    char_ops.create_character(name, race, classname)
-    ui.notify('Character created successfully!')
+    if char_ops.create_character(name, race, classname):
+        ui.notify('Character created successfully!')
+        characters_dialog().close()
+    else:
+        ui.notify('An error occurred while creating the character.')
 
 
 def create_task(description, xp, expiration_date):
-    task_ops.create_task(description, xp, expiration_date)
-    ui.notify('Task created successfully!')
+    if task_ops.create_task(description, xp, expiration_date):
+        ui.notify('Task created successfully!')
+        tasks_dialog().close()
+    else:
+        ui.notify('An error occurred while creating the task.')
 
 
 def load_profile_picture():
