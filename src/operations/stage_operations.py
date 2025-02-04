@@ -2,13 +2,35 @@ import sqlite3
 
 class Database:
     def create_connection(self):
+        """
+        Creates and returns a connection to the SQLite database.
+
+        Returns:
+            sqlite3.Connection: The connection object to the SQLite database.
+        """
         return sqlite3.connect("../../littleBigDatabase.db")
 
 class StageOperations:
     def __init__(self, db):
+        """
+        Initializes a new instance of the StageOperations class.
+
+        Args:
+            db (Database): The database instance to use for database operations.
+        """
         self.db = db
 
     def create_stage(self, stage_name, stage_path):
+        """
+        Creates a new stage with the given name and path.
+
+        Args:
+            stage_name (str): The name of the stage.
+            stage_path (str): The path of the stage.
+
+        Returns:
+            int: The ID of the newly created stage, or None if the stage creation failed.
+        """
         try:
             if not stage_name or not stage_path:
                 print("Stage name and path cannot be empty.")
@@ -35,6 +57,15 @@ class StageOperations:
                 connection.close()
 
     def get_stage(self, stage_id):
+        """
+        Retrieves a stage from the database by its ID.
+
+        Args:
+            stage_id (int): The ID of the stage to retrieve.
+
+        Returns:
+            tuple: The stage details, or None if no stage is found.
+        """
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
@@ -55,6 +86,17 @@ class StageOperations:
             return None
 
     def update_stage(self, stage_id, stage_name=None, stage_path=None):
+        """
+        Updates the details of an existing stage.
+
+        Args:
+            stage_id (int): The ID of the stage to update.
+            stage_name (str, optional): The new name of the stage.
+            stage_path (str, optional): The new path of the stage.
+
+        Returns:
+            bool: True if the stage was updated successfully, False otherwise.
+        """
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
@@ -88,6 +130,15 @@ class StageOperations:
                 connection.close()
 
     def delete_stage(self, stage_id):
+        """
+        Deletes a stage from the database by its ID.
+
+        Args:
+            stage_id (int): The ID of the stage to delete.
+
+        Returns:
+            bool: True if the stage was deleted successfully, False otherwise.
+        """
         try:
             connection = self.db.create_connection()
             cursor = connection.cursor()
