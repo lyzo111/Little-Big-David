@@ -28,7 +28,7 @@ def init_db(db: Database):
     Initializes the database by creating necessary tables if they do not exist.
     """
     # Connect to database and create if non-existing
-    connection = sqlite3.connect('littleBigDatabase.db')
+    connection = db.create_connection()
 
     # Create cursor object for SQL commands
     cursor = connection.cursor()
@@ -144,12 +144,8 @@ def populate_database(db: Database):
     connection.commit()
     connection.close()
 
-    print("Datenbanken wurden erfolgreich befüllt.")
+    print("Database was populated successfully.")
 
 
 db = Database()
 
-
-if __name__ == "__main__":
-    init_db(db)
-    populate_database(db)
