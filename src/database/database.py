@@ -58,7 +58,7 @@ def init_db(db: Database):
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS task (
                         taskID INTEGER PRIMARY KEY AUTOINCREMENT,
-                        description VARCHAR(255) NOT NULL,
+                        description VARCHAR(255) NOT NULL UNIQUE,
                         XP INT NOT NULL,
                         expirationDate DATE NOT NULL
     )''')
