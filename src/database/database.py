@@ -100,6 +100,7 @@ def init_db(db: Database):
     connection.commit()
     connection.close()
 
+# TODO: fix characters not being inserted into table on creation
 def populate_database(db: Database):
     """
     Populates the database with initial data for classes, races, and tasks.
