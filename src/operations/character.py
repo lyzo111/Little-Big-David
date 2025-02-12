@@ -1,22 +1,13 @@
 import sqlite3
-
-class Database:
-    def create_connection(self):
-        """
-        Creates and returns a connection to the SQLite database.
-
-        Returns:
-            sqlite3.Connection: The connection object to the SQLite database.
-        """
-        return sqlite3.connect("../../littleBigDatabase.db")  # Path of database
+from src.database.database import Database
 
 
 class Character:
-    def __init__(self):
+    def __init__(self, db):
         """
         Initializes a new instance of the Character class.
         """
-        self.db = Database()
+        self.db = db
 
     def create_character(self, name, race, classname, profile_image=None):
         """

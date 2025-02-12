@@ -1,14 +1,5 @@
 import sqlite3
-
-class Database:
-    def create_connection(self):
-        """
-        Creates and returns a connection to the SQLite database.
-
-        Returns:
-            sqlite3.Connection: The connection object to the SQLite database.
-        """
-        return sqlite3.connect("../../littleBigDatabase.db")  # Your actual database path
+from src.database.database import db
 
 class CharacterOperations:
     def __init__(self, db):
@@ -183,7 +174,6 @@ class CharacterStatsOperations:
 
 
 if __name__ == "__main__":
-    db = Database()
 
     # Character operations
     char_ops = CharacterOperations(db)

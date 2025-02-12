@@ -1,15 +1,5 @@
 import sqlite3
 
-class Database:
-    def create_connection(self):
-        """
-        Creates and returns a connection to the SQLite database.
-
-        Returns:
-            sqlite3.Connection: The connection object to the SQLite database.
-        """
-        return sqlite3.connect("../../littleBigDatabase.db")  # Your actual database path
-
 class LevelingSystem:
     def __init__(self, db):
         """
