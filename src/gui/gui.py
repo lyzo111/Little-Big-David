@@ -237,6 +237,7 @@ def load_profile_picture():
         return default_pfp
 
 
+# TODO: Either implement the following functions later on or discard them
 def toggle_profile_menu():
     """
     Toggles the profile menu.
@@ -263,7 +264,7 @@ def profile_picture_menu():
                 ui.image(load_profile_picture())
 
 
-# !!! Establish connection to charTasks here. Tasks here are just wild cards
+# TODO: Establish connection to charTasks here. Tasks here are just wild cards
 def quests():
     """
     Displays the quests section.
@@ -297,7 +298,7 @@ def character_customization():
                  ).style('border-color: black; border-width: 2px; border-style: solid; border-radius: 50%;')
 
 
-# !!! Get path for .png from littleBigDatabase.db
+# TODO: Get path for .png from littleBigDatabase.db
 def journey():
     """
     Displays the journey section.
