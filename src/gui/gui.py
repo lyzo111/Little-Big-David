@@ -162,7 +162,8 @@ def tasks_dialog():
             ui.label('Tasks Management').classes('text-h5')
         with ui.card():
             ui.input('Description').bind_value(state, 'description')
-            ui.number(label='XP', format='%.0f').bind_value(state, 'xp')
+            ui.number(label='XP', format='%.0f', max=150
+                      ).bind_value(state, 'xp')
             date_input().bind_value(state, 'expiration_date')
             ui.button('Create Task',
                       on_click=lambda: create_task(state.description, state.xp, state.expiration_date))
