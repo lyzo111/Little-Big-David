@@ -1,12 +1,34 @@
 import datetime
 import sqlite3
 
-def init_db():
+
+class Database:
+
+    def __init__(self, path: str = "littleBigDatabase.db"):
+        """
+        Initializes the Database class with the path to the SQLite database file.
+
+        Args:
+            path (str): The path to the SQLite database file.
+        """
+        self.path = path
+
+    def create_connection(self):
+        """
+        Creates and returns a connection to the SQLite database.
+
+        Returns:
+            sqlite3.Connection: The connection object to the SQLite database.
+        """
+        return sqlite3.connect(self.path)
+
+
+def init_db(db: Database):
     """
     Initializes the database by creating necessary tables if they do not exist.
     """
     # Connect to database and create if non-existing
-    connection = sqlite3.connect('../../littleBigDatabase.db')
+    connection = sqlite3.connect('littleBigDatabase.db')
 
     # Create cursor object for SQL commands
     cursor = connection.cursor()
@@ -78,11 +100,11 @@ def init_db():
     connection.commit()
     connection.close()
 
-def populate_database():
+def populate_database(db: Database):
     """
     Populates the database with initial data for classes, races, and tasks.
     """
-    connection = sqlite3.connect('../../littleBigDatabase.db')
+    connection = db.create_connection()
     cursor = connection.cursor()
 
     # Add classes
@@ -124,16 +146,10 @@ def populate_database():
 
     print("Datenbanken wurden erfolgreich befüllt.")
 
-class Database:
-    def create_connection(self):
-        """
-        Creates and returns a connection to the SQLite database.
 
-        Returns:
-            sqlite3.Connection: The connection object to the SQLite database.
-        """
-        return sqlite3.connect("../../littleBigDatabase.db")
+db = Database()
+
 
 if __name__ == "__main__":
-    init_db()
-    populate_database()
+    init_db(db)
+    populate_database(db)
