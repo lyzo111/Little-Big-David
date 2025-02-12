@@ -129,16 +129,20 @@ def populate_database(db: Database):
     ]
     cursor.executemany("INSERT OR IGNORE INTO race (name) VALUES (?)", races)
 
-    # Add template tasks
-    tasks = [
-        ('Workout for 30 minutes', 50, datetime.date.today()),
-        ('Read a chapter of any book', 30, datetime.date.today()),
-        ('Drink 2 liters of water', 20, datetime.date.today()),
-        ('Meditate for 10 minutes', 40, datetime.date.today()),
-        ('Create a learning protocol', 70, datetime.date.today() + datetime.timedelta(days=7)),
-        ('Learn a new skill', 100, datetime.date.today() + datetime.timedelta(days=7))
-    ]
-    cursor.executemany("INSERT OR IGNORE INTO task (description, XP, expirationDate) VALUES (?, ?, ?)", tasks)
+    # Add template tasks if table is empty
+    cursor.execute("SELECT COUNT(*) FROM task")
+    if cursor.fetchone()[0] == 0:
+
+        tasks = [
+            ('Workout for 30 minutes', 50, datetime.date.today()),
+            ('Read a chapter of any book', 30, datetime.date.today()),
+            ('Drink 2 liters of water', 20, datetime.date.today()),
+            ('Meditate for 10 minutes', 40, datetime.date.today()),
+            ('Create a learning protocol', 70, datetime.date.today() + datetime.timedelta(days=7)),
+            ('Learn a new skill', 100, datetime.date.today() + datetime.timedelta(days=7))
+        ]
+        cursor.executemany("INSERT OR IGNORE INTO task (description, XP, expirationDate) VALUES (?, ?, ?)", tasks)
+
 
     # Save changes and close connection
     connection.commit()
