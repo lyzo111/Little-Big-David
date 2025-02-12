@@ -55,7 +55,7 @@ def init_db():
                         stagePath VARCHAR(255) NOT NULL -- stagePath -> file path to assets of said stage
     )''')
 
-    # Verknüpfung Stages und Aufgaben
+    # Connect stages and tasks
     cursor.execute('''CREATE TABLE IF NOT EXISTS stageTask (
                           stageID INTEGER,
                           taskID INTEGER,
@@ -82,7 +82,6 @@ def populate_database():
     """
     Populates the database with initial data for classes, races, and tasks.
     """
-    # Verbindung zur Datenbank herstellen
     connection = sqlite3.connect('../../littleBigDatabase.db')
     cursor = connection.cursor()
 
@@ -91,7 +90,7 @@ def populate_database():
         ('Warrior',),
         ('Mage',),
         ('Rogue',),
-        ('Bard',),
+        ('Thief',),
         ('Paladin',),
         ('Ranger',)
     ]
@@ -100,11 +99,11 @@ def populate_database():
     # Add races
     races = [
         ('Human',),
-        ('Elf',),
+        ('Fairy',),
         ('Dwarf',),
-        ('Orc',),
-        ('Tiefling',),
-        ('Halfling',)
+        ('Goblin',),
+        ('Centaur',),
+        ('Giant',)
     ]
     cursor.executemany("INSERT OR IGNORE INTO race (name) VALUES (?)", races)
 
