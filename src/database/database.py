@@ -1,3 +1,4 @@
+import datetime
 import sqlite3
 
 def init_db():
@@ -85,7 +86,7 @@ def populate_database():
     connection = sqlite3.connect('../../littleBigDatabase.db')
     cursor = connection.cursor()
 
-    # Klassen hinzufügen
+    # Add classes
     classes = [
         ('Warrior',),
         ('Mage',),
@@ -96,7 +97,7 @@ def populate_database():
     ]
     cursor.executemany("INSERT OR IGNORE INTO classname (name) VALUES (?)", classes)
 
-    # Rassen hinzufügen
+    # Add races
     races = [
         ('Human',),
         ('Elf',),
@@ -107,18 +108,18 @@ def populate_database():
     ]
     cursor.executemany("INSERT OR IGNORE INTO race (name) VALUES (?)", races)
 
-    # Beispiel-Tasks hinzufügen
+    # Add template tasks
     tasks = [
-        ('Trainiere für 30 Minuten', 50, '2025-01-20'),
-        ('Lies ein Buchkapitel', 30, '2025-01-21'),
-        ('Trinke 2 Liter Wasser', 20, '2025-01-20'),
-        ('Mache 10 Minuten Meditation', 40, '2025-01-22'),
-        ('Erstelle ein Lernprotokoll', 70, '2025-01-23'),
-        ('Lerne eine neue Fähigkeit', 100, '2025-01-25')
+        ('Workout for 30 minutes', 50, datetime.date.today()),
+        ('Read a chapter of any book', 30, datetime.date.today()),
+        ('Drink 2 liters of water', 20, datetime.date.today()),
+        ('Meditate for 10 minutes', 40, datetime.date.today()),
+        ('Create a learning protocol', 70, datetime.date.today() + datetime.timedelta(days=7)),
+        ('Learn a new skill', 100, datetime.date.today() + datetime.timedelta(days=7))
     ]
     cursor.executemany("INSERT OR IGNORE INTO task (description, XP, expirationDate) VALUES (?, ?, ?)", tasks)
 
-    # Änderungen speichern und Verbindung schließen
+    # Save changes and close connection
     connection.commit()
     connection.close()
 
