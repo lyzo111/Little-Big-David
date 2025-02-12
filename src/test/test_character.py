@@ -1,13 +1,10 @@
-from src.database.database import Database
+from src.database.database import db
 from src.operations.task_operations import TaskOperations
 
 if __name__ == "__main__":
     """
     Main script to create a task using the TaskOperations class.
     """
-
-    # Create the database instance
-    db = Database()
 
     # Pass the database instance to TaskOperations
     task_ops = TaskOperations(db)

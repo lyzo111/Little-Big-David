@@ -1,7 +1,7 @@
 from src.operations.char_task_operations import CharTaskOperations
 from src.operations.character import Character
 from src.operations.task_operations import TaskOperations
-from src.database.database import Database
+from src.database.database import db
 
 if __name__ == "__main__":
     """
@@ -9,8 +9,7 @@ if __name__ == "__main__":
     retrieve tasks for the character, mark the task as completed, and retrieve tasks again.
     """
 
-    db = Database()
-    char_ops = Character()
+    char_ops = Character(db)
     task_ops = TaskOperations(db)
     char_task_ops = CharTaskOperations(db)
 

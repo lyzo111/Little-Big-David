@@ -1,4 +1,4 @@
-from src.database.database import Database
+from src.database.database import db
 from src.operations.character import Character
 
 if __name__ == "__main__":
@@ -6,11 +6,8 @@ if __name__ == "__main__":
     Main script to create, retrieve, update, and delete a character using the Character class.
     """
 
-    # Create the database instance
-    db = Database()
-
     # Create the Character operations instance
-    char_ops = Character()
+    char_ops = Character(db)
 
     # Create a character
     char_result = char_ops.create_character(name="Arthas", race="Human", classname="Paladin", profile_image=None)

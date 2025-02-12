@@ -1,4 +1,4 @@
-from src.database.database import Database
+from src.database.database import db
 from src.database.leveling import LevelingSystem
 
 if __name__ == "__main__":
@@ -6,9 +6,6 @@ if __name__ == "__main__":
     Main script to test adding XP to a character and checking for level-up,
     as well as improving stats upon level-up using the LevelingSystem class.
     """
-
-    # Create the database instance
-    db = Database()
 
     # Create the LevelingSystem instance
     leveling = LevelingSystem(db)

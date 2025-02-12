@@ -2,7 +2,7 @@
 import sqlite3
 from src.gui import gui
 from tutorial import Tutorial
-from src.database.database import init_db, populate_database
+from src.database.database import init_db, populate_database, db
 
 
 def is_first_time() -> bool:
@@ -12,7 +12,7 @@ def is_first_time() -> bool:
     Returns:
         bool: True if this is the first time (no characters exist), False otherwise.
     """
-    conn = sqlite3.connect('../littleBigDatabase.db')
+    conn = db.create_connection()
     cursor = conn.cursor()
     result = None
     try:
@@ -30,8 +30,8 @@ if __name__ in {"__main__", "__mp_main__"}:
     If this is the first time the application is run, it shows the tutorial.
     """
     print("Initializing database...")
-    init_db()
-    populate_database()
+    init_db(db)
+    populate_database(db)
 
     # Uncomment the following lines to show the tutorial if this is the first time
     # if is_first_time():

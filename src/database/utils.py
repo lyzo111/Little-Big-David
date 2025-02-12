@@ -1,6 +1,4 @@
-from src.database.database import Database
-
-db = Database()
+from src.database.database import db
 
 def get_data(table_name):
     """

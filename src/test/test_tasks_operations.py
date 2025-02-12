@@ -1,13 +1,10 @@
-from src.database.database import Database
+from src.database.database import db
 from src.operations.task_operations import TaskOperations
 
 if __name__ == "__main__":
     """
     Main script to create, retrieve, update, and delete a task using the TaskOperations class.
     """
-
-    # Initialize the database object
-    db = Database()
 
     # Pass the database object to TaskOperations
     task_ops = TaskOperations(db)

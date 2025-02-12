@@ -1,13 +1,10 @@
-from src.database.database import Database
+from src.database.database import db
 from src.operations.stage_operations import StageOperations
 
 if __name__ == "__main__":
     """
     Main script to create, retrieve, update, and delete a stage using the StageOperations class.
     """
-
-    # Initialize the database object
-    db = Database()
 
     # Pass the database object to StageOperations
     stage_ops = StageOperations(db)

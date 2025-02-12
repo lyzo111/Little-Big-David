@@ -6,7 +6,7 @@ from nicegui import ui
 from src.database import utils
 from pathlib import Path
 
-from src.database import database
+from src.database.database import db
 from src.operations.character import Character
 from src.operations.task_operations import TaskOperations
 from types import SimpleNamespace
@@ -26,8 +26,8 @@ dark_mode = ui.dark_mode()
 is_dark_mode = False  # Website starts in light mode
 
 # Operation Instances
-char_ops = Character()
-task_ops = TaskOperations(database)
+char_ops = Character(db)
+task_ops = TaskOperations(db)
 
 # Change switch style
 ui.add_css('''
@@ -222,7 +222,7 @@ def load_profile_picture():
         str: The path to the profile picture.
     """
     try:
-        conn = sqlite3.connect("../../littleBigDatabase.db")
+        conn = db.create_connection()
         cursor = conn.cursor()
 
         cursor.execute("SELECT profile_picture FROM user_profile LIMIT 1")

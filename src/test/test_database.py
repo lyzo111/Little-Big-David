@@ -1,5 +1,4 @@
-from src.database.database import init_db
-import sqlite3
+from src.database.database import init_db, db
 
 if __name__ == "__main__":
     """
@@ -7,10 +6,10 @@ if __name__ == "__main__":
     """
 
     # Initialize the database
-    init_db()
+    init_db(db)
 
     # Connect to the SQLite database
-    connection = sqlite3.connect("../../littleBigDatabase.db")
+    connection = db.create_connection()
     cursor = connection.cursor()
 
     # Insert races and classes
