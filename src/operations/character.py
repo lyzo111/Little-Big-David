@@ -1,4 +1,5 @@
 import sqlite3
+from src.database import utils
 from src.database.database import Database
 
 
@@ -19,7 +20,7 @@ class Character:
             name (str): The name of the character.
             race (str): The race of the character.
             classname (str): The class of the character.
-            profile_image (str, optional): The path to the profile image of the character. Defaults to "default_pfp.jpg".
+            profile_image (str, optional): The path to the profile image of the character. Defaults to "utils/default_pfp.jpg".
 
         Returns:
             dict: A dictionary containing the success status and a message or character ID.
@@ -48,7 +49,7 @@ class Character:
             # Insert character into database
             cursor.execute(
                 "INSERT INTO char (name, race, classname, profile_image) VALUES (?, ?, ?, ?)",
-                (name, race, classname, profile_image or "default_pfp.jpg")
+                (name, race, classname, profile_image or utils.default_pfp)
             )
             char_id = cursor.lastrowid
 

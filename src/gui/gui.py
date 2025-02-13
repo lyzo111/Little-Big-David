@@ -16,7 +16,7 @@ This module contains the GUI implementation for the Little Big RPG game.
 It uses the NiceGUI framework to create and manage the user interface.
 """
 
-default_pfp = "assets/default_pfp.jpg"
+default_pfp = utils.default_pfp
 content_row = ui.row().classes("w-full flex justify-center")  # Container for centering content horizontally
 
 # State Objects
@@ -184,7 +184,7 @@ def create_character(name, race, classname):
         race (str): The race of the character.
         classname (str): The class of the character.
     """
-    if char_ops.create_character(name, race, classname):
+    if char_ops.create_character(name, race, classname, default_pfp):
         ui.notify('Character created successfully!')
         characters_dialog().close()
     else:

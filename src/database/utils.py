@@ -1,5 +1,7 @@
 from src.database.database import db
 
+default_pfp = "assets/default_pfp.jpg"
+
 def get_data(table_name):
     """
     Retrieves data from a specified table in the database.
