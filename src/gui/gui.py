@@ -85,11 +85,11 @@ def characters_dialog():
             ui.select(
                 options=races, label='Races', value=races[0]).bind_value(state, 'races')
             ui.select(
-                options=classes, label='Classes', value=classes[0]).bind_value(state, 'class')
+                options=classes, label='Classes', value=classes[0]).bind_value(state, 'classes')
             ui.upload(on_upload=(lambda e: ui.notify(f'Uploaded: {e.name}')), on_rejected=lambda e: ui.notify('Rejected!')
                       ).props('accept="image/*"')
 
-            ui.button('Create Character', on_click=lambda: create_character(state.name, state.race, state.classname))
+            ui.button('Create Character', on_click=lambda: create_character(state.name, state.races, state.classes))
     return character_dialog
 
 
@@ -118,24 +118,9 @@ def date_input():
             return datetime.datetime.strptime(value, "%Y-%m-%d").strftime("%d.%m.%Y")
         return ""
 
-    def parse_date(value):
-        """
-        Converts a date from 'dd.mm.yyyy' format to 'yyyy-mm-dd' format.
-
-        Args:
-            value (str): The date in 'dd.mm.yyyy' format.
-
-        Returns:
-            str: The date in 'yyyy-mm-dd' format, or an empty string if the input is invalid.
-        """
-        try:
-            return datetime.datetime.strptime(value, "%d.%m.%Y").strftime("%Y-%m-%d")
-        except ValueError:
-            return ""
-
     with ui.input('Date') as date:
         with ui.menu().props('no-parent-event') as menu:
-            with ui.date().bind_value(date, forward=format_date, backward=parse_date):
+            with ui.date().bind_value(date, forward=format_date):
 
                 with ui.row().classes('justify-end'):
                     ui.button('Close', on_click=menu.close).props('flat')
