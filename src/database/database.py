@@ -100,6 +100,7 @@ def init_db(db: Database):
     connection.commit()
     connection.close()
 
+
 # TODO: fix characters not being inserted into table on creation
 def populate_database(db: Database):
     """
@@ -133,17 +134,16 @@ def populate_database(db: Database):
     # Add template tasks if table is empty
     cursor.execute("SELECT COUNT(*) FROM task")
     if cursor.fetchone()[0] == 0:
-
         tasks = [
-            ('Workout for 30 minutes', 50, datetime.date.today()),
-            ('Read a chapter of any book', 30, datetime.date.today()),
-            ('Drink 2 liters of water', 20, datetime.date.today()),
-            ('Meditate for 10 minutes', 40, datetime.date.today()),
-            ('Create a learning protocol', 70, datetime.date.today() + datetime.timedelta(days=7)),
-            ('Learn a new skill', 100, datetime.date.today() + datetime.timedelta(days=7))
+            ('Workout for 30 minutes', 50, datetime.date.today().strftime("%d.%m.%Y")),
+            ('Read a chapter of any book', 30, datetime.date.today().strftime("%d.%m.%Y")),
+            ('Drink 2 liters of water', 20, datetime.date.today().strftime("%d.%m.%Y")),
+            ('Meditate for 10 minutes', 40, datetime.date.today().strftime("%d.%m.%Y")),
+            ('Create a learning protocol', 70,
+             (datetime.date.today() + datetime.timedelta(days=7)).strftime("%d.%m.%Y")),
+            ('Learn a new skill', 100, (datetime.date.today() + datetime.timedelta(days=7)).strftime("%d.%m.%Y"))
         ]
         cursor.executemany("INSERT OR IGNORE INTO task (description, XP, expirationDate) VALUES (?, ?, ?)", tasks)
-
 
     # Save changes and close connection
     connection.commit()
@@ -153,4 +153,3 @@ def populate_database(db: Database):
 
 
 db = Database()
-
