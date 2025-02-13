@@ -86,10 +86,12 @@ def characters_dialog():
                 options=races, label='Races', value=races[0]).bind_value(state, 'races')
             ui.select(
                 options=classes, label='Classes', value=classes[0]).bind_value(state, 'classes')
-            ui.upload(on_upload=(lambda e: ui.notify(f'Uploaded: {e.name}')), on_rejected=lambda e: ui.notify('Rejected!')
+            ui.upload(on_upload=(lambda e: ui.notify(f'Uploaded: {e.name}')),
+                      on_rejected=lambda e: ui.notify('Rejected!')
                       ).props('accept="image/*"')
 
-            ui.button('Create Character', on_click=lambda: create_character(state.name, state.races, state.classes))
+            ui.button('Create Character',
+                      on_click=lambda: create_character(state.name, state.races, state.classes, character_dialog))
     return character_dialog
 
 
@@ -104,6 +106,7 @@ def date_input():
     Returns:
         ui.input: The constructed date input field.
     """
+
     def format_date(value):
         """
         Converts a date from 'yyyy-mm-dd' format to 'dd.mm.yyyy' format.
@@ -118,10 +121,22 @@ def date_input():
             return datetime.datetime.strptime(value, "%Y-%m-%d").strftime("%d.%m.%Y")
         return ""
 
+    def reformat_date(value):
+        """
+        Converts a date from 'dd.mm.yyyy' format to 'yyyy-mm-dd' format.
+        Args:
+            value (str): The date in 'dd.mm.yyyy' format.
+        Returns:
+            str: The date in 'yyyy-mm-dd' format, or an empty string if the input is invalid.
+        """
+        try:
+            return datetime.datetime.strptime(value, "%d.%m.%Y").strftime("%Y-%m-%d")
+        except ValueError:
+            return ""
+
     with ui.input('Date') as date:
         with ui.menu().props('no-parent-event') as menu:
-            with ui.date().bind_value(date, forward=format_date):
-
+            with ui.date().bind_value(date, forward=format_date, backward=reformat_date):
                 with ui.row().classes('justify-end'):
                     ui.button('Close', on_click=menu.close).props('flat')
 
@@ -151,12 +166,12 @@ def tasks_dialog():
                       ).bind_value(state, 'xp')
             date_input().bind_value(state, 'expiration_date')
             ui.button('Create Task',
-                      on_click=lambda: create_task(state.description, state.xp, state.expiration_date))
+                      on_click=lambda: create_task(state.description, state.xp, state.expiration_date, task_dialog))
     return task_dialog
 
 
 # Functions
-def create_character(name, race, classname):
+def create_character(name, race, classname, character_dialog):
     """
     Creates a new character with the given name, race, and class.
 
@@ -165,18 +180,19 @@ def create_character(name, race, classname):
     the character dialog. Otherwise, it displays an error notification.
 
     Args:
-        name (str): The name of the character.
-        race (str): The race of the character.
-        classname (str): The class of the character.
+        :param name: The name of the character.
+        :param race: The race of the character.
+        :param classname: The class of the character.
+        :param character_dialog: The dialog for character management.
     """
     if char_ops.create_character(name, race, classname, default_pfp):
         ui.notify('Character created successfully!')
-        characters_dialog().close()
+        character_dialog.close()
     else:
         ui.notify('An error occurred while creating the character.')
 
 
-def create_task(description, xp, expiration_date):
+def create_task(description, xp, expiration_date, task_dialog):
     """
     Creates a new task with the given description, XP, and expiration date.
 
@@ -185,13 +201,14 @@ def create_task(description, xp, expiration_date):
     dialog. Otherwise, it displays an error notification.
 
     Args:
-        description (str): The description of the task.
-        xp (int): The XP value of the task.
-        expiration_date (str): The expiration date of the task in 'yyyy-mm-dd' format.
+        :param description: The description of the task.
+        :param xp: The XP value of the task.
+        :param expiration_date: The expiration date of the task in 'yyyy-mm-dd' format.
+        :param task_dialog: The dialog for task management.
     """
     if task_ops.create_task(description, xp, expiration_date):
         ui.notify('Task created successfully!')
-        tasks_dialog().close()
+        task_dialog.close()
     else:
         ui.notify('An error occurred while creating the task.')
 
@@ -279,8 +296,9 @@ def character_customization():
             ui.label("Character Editor").classes("text-2xl font-bold mb-4")
             ui.label("Here you can configure your character!").classes("mb-4")
             ui.image(load_profile_picture()).classes("w-16 h-16 cursor-pointer"
-            ).on('click', characters_dialog
-                 ).style('border-color: black; border-width: 2px; border-style: solid; border-radius: 50%;')
+                                                     ).on('click', characters_dialog
+                                                          ).style(
+                'border-color: black; border-width: 2px; border-style: solid; border-radius: 50%;')
 
 
 # TODO: Get path for .png from littleBigDatabase.db
