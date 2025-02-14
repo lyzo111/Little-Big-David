@@ -26,7 +26,7 @@ class Character:
             dict: A dictionary containing the success status and a message or character ID.
         """
         try:
-            if not name or name == "" or not race or not classname:
+            if not name or not race or not classname:
                 return {"success": False, "message": "Name, Race, and Class cannot be empty."}
 
             connection = self.db.create_connection()
