@@ -185,7 +185,8 @@ def create_character(name, race, classname, character_dialog):
         :param classname: The class of the character.
         :param character_dialog: The dialog for character management.
     """
-    if char_ops.create_character(name, race, classname, default_pfp):
+    result = char_ops.create_character(name, race, classname, default_pfp)
+    if result and result.get('success'):
         ui.notify('Character created successfully!')
         character_dialog.close()
     else:
