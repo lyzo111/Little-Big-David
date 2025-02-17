@@ -267,7 +267,7 @@ def profile_picture_menu():
                 ui.image(load_profile_picture())
 
 
-# TODO: Establish connection to charTasks here. Tasks here are just wild cards
+# TODO: Create table and show xp and expiration date
 def quests():
     """
     Displays the quests section.
@@ -282,6 +282,8 @@ def quests():
                 ui.label("1. Train for 30 minutes").classes("mb-2")
                 ui.label("2. Read a chapter of any book").classes("mb-2")
                 ui.label("3. Drink 2 liters of water").classes("mb-2")
+                for task in utils.get_tasks():
+                    ui.label(f"{task[0]}. {task[1]}").classes("mb-2")
                 ui.button('Add Task', on_click=tasks_dialog).style('display: block; align-self: center;')
 
 
