@@ -9,8 +9,6 @@ def is_first_time() -> bool:
     Returns:
         bool: True if this is the first time (no characters exist), False otherwise.
     """
-    if not db.path:
-        return False
 
     conn = db.create_connection()
     cursor = conn.cursor()
