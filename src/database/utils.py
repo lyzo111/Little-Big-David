@@ -18,7 +18,11 @@ def get_data(attribute, table):
     cursor.execute(query)
     data = cursor.fetchall()
     connection.close()
-    return data
+
+    if attribute == "*":
+        return data
+
+    return [item[0] for item in data]
 
 def get_classes():
     """
