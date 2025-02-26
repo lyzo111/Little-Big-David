@@ -279,9 +279,6 @@ def quests():
             ui.label("Quests").classes("text-2xl font-bold mb-4")
             ui.label("Here are your quests:").classes("mb-4")
             with ui.card():
-                ui.label("1. Train for 30 minutes").classes("mb-2")
-                ui.label("2. Read a chapter of any book").classes("mb-2")
-                ui.label("3. Drink 2 liters of water").classes("mb-2")
                 for task in utils.get_tasks():
                     ui.label(f"{task[0]}. {task[1]}").classes("mb-2")
                 ui.button('Add Task', on_click=tasks_dialog).style('display: block; align-self: center;')
