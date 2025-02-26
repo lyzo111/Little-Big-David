@@ -1,6 +1,3 @@
-# This is a Little Big David.
-import sqlite3
-from src.gui import gui
 from tutorial import Tutorial
 from src.database.database import init_db, populate_database, db
 
@@ -12,16 +9,16 @@ def is_first_time() -> bool:
     Returns:
         bool: True if this is the first time (no characters exist), False otherwise.
     """
+    if not db.path:
+        return False
+
     conn = db.create_connection()
     cursor = conn.cursor()
-    result = None
-    try:
-        cursor.execute("SELECT EXISTS(SELECT 1 FROM char)")
-        result = bool(cursor.fetchone()[0])
-    finally:
-        # Invert bool to make name of method correspond to value of bool
-        # Returns 'True' if user exists, otherwise 'False'
-        return not result if result is not None else False
+    cursor.execute("SELECT EXISTS(SELECT 1 FROM char)")
+    result = bool(cursor.fetchone()[0])
+
+    # Invert bool to make name of method correspond to value of bool
+    return not result if result is not None else False
 
 
 if __name__ in {"__main__", "__mp_main__"}:
@@ -36,6 +33,6 @@ if __name__ in {"__main__", "__mp_main__"}:
     # Uncomment the following lines to show the tutorial if this is the first time
     # if is_first_time():
     #     Tutorial().show()
-    #     Add character creation
 
+    from src.gui import gui
     gui.initialize_gui()
