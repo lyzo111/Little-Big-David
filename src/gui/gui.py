@@ -267,7 +267,7 @@ def profile_picture_menu():
                 ui.image(load_profile_picture())
 
 
-# TODO: Create table and show xp and expiration date
+# TODO: Add multiple selection for tasks to edit (grey out if multiple selected) and delete
 def quests():
     """
     Displays the quests section.
@@ -279,8 +279,13 @@ def quests():
             ui.label("Quests").classes("text-2xl font-bold mb-4")
             ui.label("Here are your quests:").classes("mb-4")
             with ui.card():
-                for task in utils.get_tasks():
-                    ui.label(f"{task[0]}. {task[1]}").classes("mb-2")
+                rows = [{'id': i[0], 'desc': i[1], 'xp': i[2], 'exp': i[3]} for i in utils.get_tasks()]
+                ui.table(rows=rows, columns=[
+                    {'name': 'id', 'label': 'ID', 'field': 'id'},
+                    {'name': 'desc', 'label': 'Description', 'field': 'desc', 'align': 'left'},
+                    {'name': 'xp', 'label': 'XP', 'field': 'xp'},
+                    {'name': 'exp', 'label': 'Expiration Date', 'field': 'exp'}
+                ])
                 ui.button('Add Task', on_click=tasks_dialog).style('display: block; align-self: center;')
 
 
