@@ -147,7 +147,7 @@ def date_input():
 
 
 # Task Management
-def tasks_dialog():
+def task_creation():
     """
     Creates and returns a dialog for task management.
 
@@ -157,20 +157,46 @@ def tasks_dialog():
     Returns:
         ui.dialog: The constructed task management dialog.
     """
-    with ui.dialog() as task_dialog, ui.card():
+    with ui.dialog() as task_creation_dialog, ui.card():
         with ui.row():
-            ui.label('Tasks Management').classes('text-h5')
+            ui.label('Task Management').classes('text-h5')
         with ui.card():
             ui.input('Description').bind_value(state, 'description')
             ui.number(label='XP', format='%.0f', max=150
                       ).bind_value(state, 'xp')
             date_input().bind_value(state, 'expiration_date')
             ui.button('Create Task',
-                      on_click=lambda: create_task(state.description, state.xp, state.expiration_date, task_dialog))
-    return task_dialog
+                      on_click=lambda: create_task(state.description, state.xp, state.expiration_date, task_creation_dialog))
+    return task_creation_dialog
 
 
-# Functions
+def task_manipulation():
+    """
+    Creates and returns a dialog for task manipulation.
+
+    This function constructs a dialog with input fields for task description, XP,
+    and expiration date. It includes a button to edit an existing task using the inputs made with the input fields.
+
+    Returns:
+        ui.dialog: The constructed task manipulation dialog.
+    """
+    with ui.dialog() as task_manipulation_dialog, ui.card():
+        with ui.row():
+            ui.label('Task Editor').classes('text-h5')
+        with ui.card():
+            ui.input('Description').bind_value(state, 'description')
+            ui.number(label='XP', format='%.0f', max=150
+                      ).bind_value(state, 'xp')
+            date_input().bind_value(state, 'expiration_date')
+            ui.button('Edit Task',
+                      on_click=lambda: create_task(state.description, state.xp, state.expiration_date, task_manipulation_dialog))
+    return task_manipulation_dialog
+
+
+def task_deletion():
+    """"""
+
+
 def create_character(name, race, classname, character_dialog):
     """
     Creates a new character with the given name, race, and class.
@@ -193,7 +219,7 @@ def create_character(name, race, classname, character_dialog):
         ui.notify('An error occurred while creating the character.')
 
 
-def create_task(description, xp, expiration_date, task_dialog):
+def create_task(description, xp, expiration_date, task_creation_dialog):
     """
     Creates a new task with the given description, XP, and expiration date.
 
@@ -205,13 +231,29 @@ def create_task(description, xp, expiration_date, task_dialog):
         :param description: The description of the task.
         :param xp: The XP value of the task.
         :param expiration_date: The expiration date of the task in 'yyyy-mm-dd' format.
-        :param task_dialog: The dialog for task management.
+        :param task_creation_dialog: The dialog for task management.
     """
     if task_ops.create_task(description, xp, expiration_date):
         ui.notify('Task created successfully!')
-        task_dialog.close()
+        task_creation_dialog.close()
     else:
         ui.notify('An error occurred while creating the task.')
+
+
+def edit_task(task_id, description, xp, expiration_date, task_manipulation_dialog):
+    if task_ops.update_task(task_id, description, xp, expiration_date):
+        ui.notify('Task edited successfully!')
+        task_manipulation_dialog.close()
+    else:
+        ui.notify('An error occurred while editing the task.')
+
+
+def delete_task(task_id, task_deletion_dialog):
+    if task_ops.delete_task(task_id):
+        ui.notify('Task deleted successfully!')
+        task_deletion_dialog.close()
+    else:
+        ui.notify('An error occurred while deleting the task.')
 
 
 def load_profile_picture():
@@ -286,7 +328,10 @@ def quests():
                     {'name': 'xp', 'label': 'XP', 'field': 'xp'},
                     {'name': 'exp', 'label': 'Expiration Date', 'field': 'exp'}
                 ])
-                ui.button('Add Task', on_click=tasks_dialog).style('display: block; align-self: center;')
+                with ui.row().classes('w-full'):
+                    ui.button('Add Task', on_click=task_creation).classes('flex-1')
+                    ui.button('Edit Task', on_click=task_manipulation).classes('flex-1')
+                    ui.button('Delete Task', on_click=task_deletion).classes('flex-1')
 
 
 def character_customization():
