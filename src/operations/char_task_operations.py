@@ -125,12 +125,10 @@ class CharTaskOperations:
                 (char_id, task_id)
             )
             connection.commit()
+            connection.close()
             print(f"Task {task_id} marked as completed for character {char_id}.")
             return True
 
         except sqlite3.Error as e:
             print(f"An error occurred: {e}")
             return False
-
-        finally:
-            connection.close()
