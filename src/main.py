@@ -28,10 +28,9 @@ if __name__ in {"__main__", "__mp_main__"}:
     populate_database(db)
 
     # Uncomment the following lines to show the tutorial if this is the first time
-    if is_first_time():
-        Tutorial().show()
+    # if is_first_time():
+    #     Tutorial().show()
 
     from src.gui import gui
 
-    if not is_first_time():
-        gui.initialize_gui()
+    gui.initialize_gui()
