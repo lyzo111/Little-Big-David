@@ -319,7 +319,6 @@ def quests():
     with content_row:
         with ui.column().classes("items-center justify-center"):
             ui.label("Quests").classes("text-2xl font-bold mb-4")
-            ui.label("Here are your quests:").classes("mb-4")
             with ui.card():
                 rows = [{'id': i[0], 'desc': i[1], 'xp': i[2], 'exp': i[3]} for i in utils.get_tasks()]
                 ui.table(rows=rows, columns=[
