@@ -351,23 +351,6 @@ def character_customization():
                 'border-color: black; border-width: 2px; border-style: solid; border-radius: 50%;')
 
 
-# TODO: Get path for .png from littleBigDatabase.db
-def journey():
-    """
-    Displays the journey section.
-
-    This function creates a section in the UI to display the user's journey, including images of the character and enemy.
-    """
-    with content_row:
-        with ui.column().classes("items-center justify-center"):
-            ui.label("Your Journey").classes("text-2xl font-bold mb-4")
-            ui.label("Here you can see David on his journey:").classes("mb-4")
-            with ui.card().classes("items-center justify-center p-4"):
-                ui.image("david_sprite.png").classes("w-16 h-16")
-                ui.label("Enemy: Big Boss >:c").classes("mt-4")
-                ui.image("enemy_sprite.png").classes("w-16 h-16")
-
-
 def layout():
     """
     Sets up the layout of the application.
@@ -376,7 +359,6 @@ def layout():
     """
     quests()
     character_customization()
-    journey()
 
 
 layout()
